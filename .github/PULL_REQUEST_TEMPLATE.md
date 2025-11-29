@@ -1,6 +1,6 @@
 <!--
 Before submitting a pull request, please read
-https://github.com/nodejs/js-native-api-test/blob/main/CONTRIBUTING.md.
+https://github.com/nodejs/node-api-cts/blob/main/CONTRIBUTING.md.
 
 Developer's Certificate of Origin 1.1
 
