@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "node:test": "node --test ./implementors/node/run-tests.ts",
-    "lint": "eslint"
+    "lint": "eslint",
+    "build-addons": "cmake-js build"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
+    "cmake-js": "^7.4.0",
     "eslint": "^9.39.1"
   },
   "dependencies": {
