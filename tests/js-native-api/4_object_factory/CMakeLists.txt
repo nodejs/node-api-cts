@@ -1,0 +1,1 @@
+add_node_api_cts_addon(4_object_factory 4_object_factory.c)
