@@ -1,0 +1,1 @@
+add_node_api_cts_addon(3_callbacks 3_callbacks.c)
