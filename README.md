@@ -1,6 +1,7 @@
 # Node-API Conformance Test Suite (`node-api-cts`)
 
-A pure ECMAScript test suite for Node-API implementors across different JS engines and runtimes.
+A test suite for Node-API implementors across different JS engines and runtimes.
+Written in ECMAScript & C/C++ with an implementor customizable harness.
 
 > [!IMPORTANT]  
 > This repository is currently a work-in-progress and shouldn't yet be relied on by anyone.
