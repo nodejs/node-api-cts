@@ -1,0 +1,34 @@
+name: Test Node.js implementation
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 20.x
+          - 22.x
+          - 24.x
+          - 25.x
+    runs-on: ubuntu-latest
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+      with:
+        egress-policy: audit
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Check Node.js installation
+      run: |
+        node --version
+        npm --version
+    - name: Install dependencies
+      run: npm install
+    - name: npm test
+      run: npm run node:test
