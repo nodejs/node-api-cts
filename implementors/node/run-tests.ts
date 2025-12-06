@@ -5,6 +5,12 @@ import { test, type TestContext } from "node:test";
 
 const ROOT_PATH = path.resolve(import.meta.dirname, "..", "..");
 const TESTS_ROOT_PATH = path.join(ROOT_PATH, "tests");
+const ASSERT_MODULE_PATH = path.join(
+  ROOT_PATH,
+  "implementors",
+  "node",
+  "assert.js"
+);
 
 async function listDirectoryEntries(dir: string) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -27,7 +33,11 @@ async function listDirectoryEntries(dir: string) {
 
 function runFileInSubprocess(filePath: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const child = spawn(process.execPath, [filePath]);
+    const child = spawn(process.execPath, [
+      "--import",
+      ASSERT_MODULE_PATH,
+      filePath,
+    ]);
 
     let stderrOutput = "";
     child.stderr.setEncoding("utf8");
