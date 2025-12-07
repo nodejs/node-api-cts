@@ -1,0 +1,13 @@
+{
+  "name": "node-api-cts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "shallow-checkout-nodejs": "node ./tools/shallow-checkout-nodejs.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
+  }
+}
