@@ -1,0 +1,12 @@
+{
+  "name": "node-api-cts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "node:test": "node --test ./implementors/node/run-tests.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1"
+  }
+}
