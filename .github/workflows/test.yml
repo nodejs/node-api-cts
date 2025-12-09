@@ -29,6 +29,6 @@ jobs:
         node --version
         npm --version
     - name: Install dependencies
-      run: npm install
+      run: npm ci
     - name: npm test
       run: npm run node:test
