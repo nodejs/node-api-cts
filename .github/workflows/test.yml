@@ -20,6 +20,8 @@ jobs:
       with:
         egress-policy: audit
 
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
       with:
@@ -31,4 +33,8 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: npm test
+      if: matrix.node-version != '20.x'
       run: npm run node:test
+    - name: npm test with amaro
+      if: matrix.node-version == '20.x'
+      run: NODE_OPTIONS="--import=./tools/strip.js" npm run node:test
