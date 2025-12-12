@@ -37,4 +37,6 @@ jobs:
       run: npm run node:test
     - name: npm test with amaro
       if: matrix.node-version == '20.x'
-      run: NODE_OPTIONS="--import=./tools/strip.js" npm run node:test
+      run: npm run node:test
+      env:
+        NODE_OPTIONS: --import=${{ github.workspace }}/implementors/node/ts-strip.js
