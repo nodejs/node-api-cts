@@ -1,1 +1,8 @@
 node_modules/
+
+# Shallow checkout for agents to reference
+/node/
+
+# Artifacts from building addons
+/build/
+/tests/**/*.node
