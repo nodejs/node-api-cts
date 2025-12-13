@@ -5,11 +5,18 @@ import { test, type TestContext } from "node:test";
 
 const ROOT_PATH = path.resolve(import.meta.dirname, "..", "..");
 const TESTS_ROOT_PATH = path.join(ROOT_PATH, "tests");
+
 const ASSERT_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
   "assert.js"
+);
+const LOAD_ADDON_MODULE_PATH = path.join(
+  ROOT_PATH,
+  "implementors",
+  "node",
+  "load-addon.js"
 );
 
 async function listDirectoryEntries(dir: string) {
@@ -31,13 +38,19 @@ async function listDirectoryEntries(dir: string) {
   return { directories, files };
 }
 
-function runFileInSubprocess(filePath: string): Promise<void> {
+function runFileInSubprocess(cwd: string, filePath: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const child = spawn(process.execPath, [
-      "--import",
-      ASSERT_MODULE_PATH,
-      filePath,
-    ]);
+    const child = spawn(
+      process.execPath,
+      [
+        "--import",
+        ASSERT_MODULE_PATH,
+        "--import",
+        LOAD_ADDON_MODULE_PATH,
+        filePath,
+      ],
+      { cwd }
+    );
 
     let stderrOutput = "";
     child.stderr.setEncoding("utf8");
@@ -80,8 +93,7 @@ async function populateSuite(
   const { directories, files } = await listDirectoryEntries(dir);
 
   for (const file of files) {
-    const filePath = path.join(dir, file);
-    await testContext.test(file, () => runFileInSubprocess(filePath));
+    await testContext.test(file, () => runFileInSubprocess(dir, file));
   }
 
   for (const directory of directories) {
