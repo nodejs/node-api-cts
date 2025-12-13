@@ -6,12 +6,14 @@
   "scripts": {
     "node:test": "node --test ./implementors/node/run-tests.ts",
     "lint": "eslint",
-    "build-addons": "cmake-js build"
+    "addons:configure": "cmake -G Ninja -S . -B ./build",
+    "addons:build": "cmake --build ./build",
+    "addons:clean": "git clean -xf '**/*.node' && rm -rf ./build"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "cmake-js": "^7.4.0",
-    "eslint": "^9.39.1"
+    "eslint": "^9.39.1",
+    "node-api-headers": "^1.7.0"
   },
   "dependencies": {
     "amaro": "^1.1.5"

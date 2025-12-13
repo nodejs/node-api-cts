@@ -32,8 +32,10 @@ jobs:
         npm --version
     - name: Install dependencies
       run: npm ci
-    - name: Build addons
-      run: npm run build-addons
+    - name: Configure and build addons
+      run: |
+        npm run addons:configure
+        npm run addons:build
     - name: npm test
       if: matrix.node-version != '20.x'
       run: npm run node:test

@@ -1,14 +1,30 @@
 cmake_minimum_required(VERSION 3.15...3.31)
 project(node-api-cts)
 
+set(NODE_API_HEADERS_DIR ${PROJECT_SOURCE_DIR}/node_modules/node-api-headers)
+
+if(NOT EXISTS ${NODE_API_HEADERS_DIR})
+  message(FATAL_ERROR "Expected ${NODE_API_HEADERS_DIR} to exist")
+endif()
+
+if(MSVC)
+  set(NODE_API_LIB ${PROJECT_BINARY_DIR}/node.lib)
+  set(NODE_API_DEF ${NODE_API_HEADERS_DIR}/def/node_api.def)
+  execute_process(COMMAND ${CMAKE_AR} /def:${NODE_API_DEF} /out:${NODE_API_LIB} ${CMAKE_STATIC_LINKER_FLAGS})
+  set(NODE_API_SRC ${PROJECT_SOURCE_DIR}/implementors/node/win_delay_load_hook.cc)
+endif()
+
 function(add_node_api_cts_addon ADDON_NAME SRC)
-  add_library(${ADDON_NAME} SHARED ${SRC} ${CMAKE_JS_SRC})
+  add_library(${ADDON_NAME} SHARED ${SRC} ${NODE_API_SRC})
   set_target_properties(${ADDON_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
-  target_include_directories(${ADDON_NAME} PRIVATE ${CMAKE_JS_INC})
-  target_link_libraries(${ADDON_NAME} PRIVATE ${CMAKE_JS_LIB})
+  target_include_directories(${ADDON_NAME} PRIVATE ${NODE_API_HEADERS_DIR}/include)
+  target_link_libraries(${ADDON_NAME} PRIVATE ${NODE_API_LIB})
   target_compile_features(${ADDON_NAME} PRIVATE cxx_std_17)
   target_compile_definitions(${ADDON_NAME} PRIVATE ADDON_NAME=${ADDON_NAME})
   set_target_properties(${ADDON_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+  if(APPLE)
+    set_target_properties(${ADDON_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+  endif()
 endfunction()
 
 file(GLOB_RECURSE cmake_dirs RELATIVE ${CMAKE_SOURCE_DIR} tests/*/CMakeLists.txt)
@@ -17,8 +33,3 @@ foreach(cmake_file ${cmake_dirs})
   get_filename_component(subdir ${cmake_file} DIRECTORY)
   add_subdirectory(${subdir})
 endforeach()
-
-if(MSVC AND CMAKE_JS_NODELIB_DEF AND CMAKE_JS_NODELIB_TARGET)
-  # Generate node.lib
-  execute_process(COMMAND ${CMAKE_AR} /def:${CMAKE_JS_NODELIB_DEF} /out:${CMAKE_JS_NODELIB_TARGET} ${CMAKE_STATIC_LINKER_FLAGS})
-endif()
