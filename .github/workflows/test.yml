@@ -8,12 +8,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        runner:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
         node-version:
           - 20.x
           - 22.x
           - 24.x
           - 25.x
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
