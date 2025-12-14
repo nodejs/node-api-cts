@@ -6,3 +6,4 @@ node_modules/
 # Artifacts from building addons
 /build/
 /tests/**/*.node
+/tests/**/*.pdb
