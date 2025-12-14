@@ -43,10 +43,11 @@ function runFileInSubprocess(cwd: string, filePath: string): Promise<void> {
     const child = spawn(
       process.execPath,
       [
+        // Using file scheme prefix when to enable imports on Windows
         "--import",
-        ASSERT_MODULE_PATH,
+        "file://" + ASSERT_MODULE_PATH,
         "--import",
-        LOAD_ADDON_MODULE_PATH,
+        "file://" + LOAD_ADDON_MODULE_PATH,
         filePath,
       ],
       { cwd }

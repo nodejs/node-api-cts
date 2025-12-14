@@ -16,15 +16,26 @@ endif()
 
 function(add_node_api_cts_addon ADDON_NAME SRC)
   add_library(${ADDON_NAME} SHARED ${SRC} ${NODE_API_SRC})
-  set_target_properties(${ADDON_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
+  set_target_properties(${ADDON_NAME} PROPERTIES
+    PREFIX ""
+    SUFFIX ".node"
+    # Co-locate the output binary with the source file
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    # (for MSVC)
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+  if(APPLE)
+    set_target_properties(${ADDON_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+  elseif(MSVC)
+    set_target_properties(${ADDON_NAME} PROPERTIES LINK_FLAGS "/DELAYLOAD:NODE.EXE")
+    # Set the HOST_BINARY expected by win_delay_load_hook.cc
+    target_compile_definitions(${ADDON_NAME} PRIVATE HOST_BINARY="node.exe")
+  endif()
   target_include_directories(${ADDON_NAME} PRIVATE ${NODE_API_HEADERS_DIR}/include)
   target_link_libraries(${ADDON_NAME} PRIVATE ${NODE_API_LIB})
   target_compile_features(${ADDON_NAME} PRIVATE cxx_std_17)
   target_compile_definitions(${ADDON_NAME} PRIVATE ADDON_NAME=${ADDON_NAME})
-  set_target_properties(${ADDON_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-  if(APPLE)
-    set_target_properties(${ADDON_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
-  endif()
 endfunction()
 
 file(GLOB_RECURSE cmake_dirs RELATIVE ${CMAKE_SOURCE_DIR} tests/*/CMakeLists.txt)
