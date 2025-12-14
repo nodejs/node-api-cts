@@ -6,7 +6,7 @@
   "scripts": {
     "node:test": "node --test ./implementors/node/run-tests.ts",
     "lint": "eslint",
-    "addons:configure": "cmake -G Ninja -S . -B ./build",
+    "addons:configure": "cmake -S . -B ./build",
     "addons:build": "cmake --build ./build",
     "addons:clean": "git clean -xf '**/*.node' && rm -rf ./build"
   },
