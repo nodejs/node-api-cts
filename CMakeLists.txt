@@ -11,11 +11,10 @@ if(MSVC)
   set(NODE_API_LIB ${PROJECT_BINARY_DIR}/node.lib)
   set(NODE_API_DEF ${NODE_API_HEADERS_DIR}/def/node_api.def)
   execute_process(COMMAND ${CMAKE_AR} /def:${NODE_API_DEF} /out:${NODE_API_LIB} ${CMAKE_STATIC_LINKER_FLAGS})
-  set(NODE_API_SRC ${PROJECT_SOURCE_DIR}/implementors/node/win_delay_load_hook.cc)
 endif()
 
 function(add_node_api_cts_addon ADDON_NAME SRC)
-  add_library(${ADDON_NAME} SHARED ${SRC} ${NODE_API_SRC})
+  add_library(${ADDON_NAME} SHARED ${SRC})
   set_target_properties(${ADDON_NAME} PROPERTIES
     PREFIX ""
     SUFFIX ".node"
@@ -29,8 +28,6 @@ function(add_node_api_cts_addon ADDON_NAME SRC)
     set_target_properties(${ADDON_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
   elseif(MSVC)
     set_target_properties(${ADDON_NAME} PROPERTIES LINK_FLAGS "/DELAYLOAD:NODE.EXE")
-    # Set the HOST_BINARY expected by win_delay_load_hook.cc
-    target_compile_definitions(${ADDON_NAME} PRIVATE HOST_BINARY="node.exe")
   endif()
   target_include_directories(${ADDON_NAME} PRIVATE ${NODE_API_HEADERS_DIR}/include)
   target_link_libraries(${ADDON_NAME} PRIVATE ${NODE_API_LIB})
