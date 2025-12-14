@@ -47,4 +47,5 @@ jobs:
       if: matrix.node-version == '20.x'
       run: npm run node:test
       env:
-        NODE_OPTIONS: --import=${{ github.workspace }}/implementors/node/ts-strip.js
+        # Using file scheme prefix when to enable imports on Windows
+        NODE_OPTIONS: --import=file://${{ github.workspace }}/implementors/node/ts-strip.js
