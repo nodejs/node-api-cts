@@ -22,6 +22,12 @@ const LOAD_ADDON_MODULE_PATH = path.join(
   "node",
   "load-addon.js"
 );
+const GC_MODULE_PATH = path.join(
+  ROOT_PATH,
+  "implementors",
+  "node",
+  "gc.js"
+);
 
 export function listDirectoryEntries(dir: string) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -51,10 +57,13 @@ export function runFileInSubprocess(
       process.execPath,
       [
         // Using file scheme prefix when to enable imports on Windows
+        "--expose-gc",
         "--import",
         "file://" + ASSERT_MODULE_PATH,
         "--import",
         "file://" + LOAD_ADDON_MODULE_PATH,
+        "--import",
+        "file://" + GC_MODULE_PATH,
         filePath,
       ],
       { cwd }

@@ -13,8 +13,8 @@ if(MSVC)
   execute_process(COMMAND ${CMAKE_AR} /def:${NODE_API_DEF} /out:${NODE_API_LIB} ${CMAKE_STATIC_LINKER_FLAGS})
 endif()
 
-function(add_node_api_cts_addon ADDON_NAME SRC)
-  add_library(${ADDON_NAME} SHARED ${SRC})
+function(add_node_api_cts_addon ADDON_NAME)
+  add_library(${ADDON_NAME} SHARED ${ARGN})
   set_target_properties(${ADDON_NAME} PROPERTIES
     PREFIX ""
     SUFFIX ".node"
