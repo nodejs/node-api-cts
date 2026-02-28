@@ -1,0 +1,164 @@
+# Porting Plan
+
+This document tracks the progress of porting tests from Node.js's test suite into the CTS.
+The source directories are [`test/js-native-api`](https://github.com/nodejs/node/tree/main/test/js-native-api)
+and [`test/node-api`](https://github.com/nodejs/node/tree/main/test/node-api) in the Node.js repository.
+
+Difficulty is assessed on two axes:
+- **Size/complexity** — total lines of C/C++ and JS across all source files
+- **Runtime-API dependence** — pure `js_native_api.h` is cheapest; Node.js extensions and direct
+  libuv calls require harness work or Node-only scoping
+
+| Rating | Meaning |
+|---|---|
+| Easy | Small test, pure `js_native_api.h` or trivial runtime API, straightforward 1:1 port |
+| Medium | Moderate size or uses a Node.js extension API that the harness will need to abstract |
+| Hard | Large test and/or deep libuv/worker/SEA dependency; may need new harness primitives or Node-only scoping |
+
+## Engine-specific (`js-native-api`)
+
+Tests covering the engine-specific part of Node-API, defined in `js_native_api.h`.
+
+| Directory | Status | Difficulty |
+|---|---|---|
+| `2_function_arguments` | Ported | — |
+| `3_callbacks` | Not ported | Easy |
+| `4_object_factory` | Not ported | Easy |
+| `5_function_factory` | Not ported | Easy |
+| `6_object_wrap` | Not ported | Medium |
+| `7_factory_wrap` | Not ported | Easy |
+| `8_passing_wrapped` | Not ported | Easy |
+| `test_array` | Not ported | Easy |
+| `test_bigint` | Not ported | Easy |
+| `test_cannot_run_js` | Not ported | Medium |
+| `test_constructor` | Not ported | Medium |
+| `test_conversions` | Not ported | Medium |
+| `test_dataview` | Not ported | Easy |
+| `test_date` | Not ported | Easy |
+| `test_error` | Not ported | Medium |
+| `test_exception` | Not ported | Medium |
+| `test_finalizer` | Not ported | Medium |
+| `test_function` | Not ported | Medium |
+| `test_general` | Not ported | Hard |
+| `test_handle_scope` | Not ported | Easy |
+| `test_instance_data` | Not ported | Easy |
+| `test_new_target` | Not ported | Easy |
+| `test_number` | Not ported | Easy |
+| `test_object` | Not ported | Hard |
+| `test_promise` | Not ported | Easy |
+| `test_properties` | Not ported | Easy |
+| `test_reference` | Not ported | Medium |
+| `test_reference_double_free` | Not ported | Easy |
+| `test_sharedarraybuffer` | Not ported | Medium |
+| `test_string` | Not ported | Medium |
+| `test_symbol` | Not ported | Easy |
+| `test_typedarray` | Not ported | Medium |
+
+## Runtime-specific (`node-api`)
+
+Tests covering the runtime-specific part of Node-API, defined in `node_api.h`.
+
+| Directory | Status | Difficulty |
+|---|---|---|
+| `1_hello_world` | Not ported | Easy |
+| `test_async` | Not ported | Hard |
+| `test_async_cleanup_hook` | Not ported | Hard |
+| `test_async_context` | Not ported | Hard |
+| `test_buffer` | Not ported | Medium |
+| `test_callback_scope` | Not ported | Hard |
+| `test_cleanup_hook` | Not ported | Medium |
+| `test_env_teardown_gc` | Not ported | Easy |
+| `test_exception` | Not ported | Easy |
+| `test_fatal` | Not ported | Hard |
+| `test_fatal_exception` | Not ported | Easy |
+| `test_general` | Not ported | Medium |
+| `test_init_order` | Not ported | Medium |
+| `test_instance_data` | Not ported | Hard |
+| `test_make_callback` | Not ported | Hard |
+| `test_make_callback_recurse` | Not ported | Hard |
+| `test_null_init` | Not ported | Medium |
+| `test_reference_by_node_api_version` | Not ported | Medium |
+| `test_sea_addon` | Not ported | Hard |
+| `test_threadsafe_function` | Not ported | Hard |
+| `test_threadsafe_function_shutdown` | Not ported | Hard |
+| `test_uv_loop` | Not ported | Hard |
+| `test_uv_threadpool_size` | Not ported | Hard |
+| `test_worker_buffer_callback` | Not ported | Hard |
+| `test_worker_terminate` | Not ported | Hard |
+| `test_worker_terminate_finalization` | Not ported | Hard |
+
+## Special Considerations
+
+### `node_api_post_finalizer` (`6_object_wrap`, `test_finalizer`)
+
+Both tests call `node_api_post_finalizer` to defer JS-touching work out of the GC finalizer and
+onto the main thread. This is a Node.js extension not guaranteed to be present on other engines.
+The CTS harness will need a platform-agnostic post-finalizer primitive that implementors can map
+to their own deferred-callback mechanism, or the tests need to isolate the post-finalizer cases
+into a Node-specific subtest.
+
+### `node_api_set_prototype` / `node_api_get_prototype` (`test_general`, js-native-api)
+
+The general test suite mixes standard `js_native_api.h` assertions with calls to
+`node_api_set_prototype` and `node_api_get_prototype`, which are Node.js extensions. These do
+not exist on other engines. The CTS port should split the affected test cases into an engine-agnostic
+core and a Node-only annex, or guard those cases with a runtime capability check.
+
+### SharedArrayBuffer backing-store creation (`test_sharedarraybuffer`)
+
+While `napi_is_sharedarraybuffer` and `napi_get_typedarray_info` are part of `js_native_api.h`,
+the test creates its SharedArrayBuffer via a Node-specific helper. The CTS version will need a
+harness-provided factory (something like `create_shared_array_buffer(size)`) that each runtime
+can implement using its own path.
+
+### libuv dependency (multiple `node-api` tests)
+
+The following tests call into libuv directly — `napi_get_uv_event_loop`, `uv_thread_t`,
+`uv_mutex_t`, `uv_async_t`, `uv_check_t`, `uv_idle_t`, `uv_queue_work`, and related APIs:
+
+- `test_async`, `test_async_cleanup_hook`, `test_async_context`
+- `test_callback_scope`
+- `test_fatal` (uses `uv_thread_t` to test cross-thread fatal errors)
+- `test_instance_data` (async work + threadsafe functions + `uv_thread_t`)
+- `test_uv_loop`, `test_uv_threadpool_size`
+
+Porting options:
+1. **Node-only scope** — mark these tests as Node.js-only and skip on other runtimes.
+2. **Harness abstraction** — introduce a minimal platform-agnostic threading/async API in the
+   harness (e.g., `cts_thread_create`, `cts_async_schedule`) that implementors back with their
+   own event loop primitives (libuv, tokio, etc.).
+
+### Threadsafe functions (`test_threadsafe_function`, `test_threadsafe_function_shutdown`)
+
+`test_threadsafe_function` is the largest single test (~700 total lines across C and JS), covering
+blocking/non-blocking queue modes, queue-full handling, multiple concurrent threads, finalization
+ordering, uncaught exception propagation, and high-precision timing via `uv_hrtime`. The threading
+primitives are libuv-specific (same concern as the section above). Porting this test likely depends
+on resolving the libuv abstraction question first.
+
+### Worker threads (`test_worker_buffer_callback`, `test_worker_terminate`, `test_worker_terminate_finalization`)
+
+These three tests exercise addon behavior inside Node.js worker threads: buffer finalizer delivery
+in worker contexts, function-call behavior under pending exceptions during worker shutdown, and
+wrapped-object finalization on forced worker termination. Node.js worker threads have no direct
+equivalent in most other Node-API runtimes. These tests are likely Node.js-only and should be
+scoped accordingly.
+
+### SEA — Single Executable Applications (`test_sea_addon`)
+
+`test_sea_addon` verifies that a native addon can be loaded inside a Node.js Single Executable
+Application. SEA is a Node.js-specific packaging feature with no equivalent in other runtimes.
+This test should be excluded from the CTS scope or placed in a Node-only annex.
+
+### `napi_get_node_version` (`test_general`, node-api)
+
+`test_general` calls `napi_get_node_version`, which returns the Node.js major/minor/patch version.
+No equivalent exists in other runtimes. The CTS port should either omit that assertion or expose a
+harness helper (e.g., `cts_get_runtime_version`) that runtimes can optionally implement.
+
+### Legacy module registration (`test_null_init`)
+
+`test_null_init` exercises the deprecated `NAPI_MODULE` macro with a NULL init function, calling
+`napi_module_register` directly. Some newer runtimes that implement Node-API may not support this
+legacy registration path. If so, this test should be scoped as Node-only or skipped on runtimes
+that only support `NAPI_MODULE_INIT`.
