@@ -1,0 +1,1 @@
+add_node_api_cts_addon(test_new_target test_new_target.c)

@@ -1,0 +1,1 @@
+add_node_api_cts_addon(7_factory_wrap 7_factory_wrap.cc myobject.cc)

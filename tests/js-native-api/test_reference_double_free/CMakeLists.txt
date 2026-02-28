@@ -1,0 +1,1 @@
+add_node_api_cts_addon(test_reference_double_free test_reference_double_free.c)
