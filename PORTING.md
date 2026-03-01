@@ -40,37 +40,37 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 
 | Directory                    | Status     | Difficulty |
 | ---------------------------- | ---------- | ---------- |
-| `2_function_arguments`       | Ported     | —          |
-| `3_callbacks`                | Ported     | Easy       |
-| `4_object_factory`           | Ported     | Easy       |
-| `5_function_factory`         | Ported     | Easy       |
+| `2_function_arguments`       | Ported ✅  | —          |
+| `3_callbacks`                | Ported ✅  | Easy       |
+| `4_object_factory`           | Ported ✅  | Easy       |
+| `5_function_factory`         | Ported ✅  | Easy       |
 | `6_object_wrap`              | Not ported | Medium     |
-| `7_factory_wrap`             | Ported     | Easy       |
-| `8_passing_wrapped`          | Ported     | Easy       |
-| `test_array`                 | Ported     | Easy       |
-| `test_bigint`                | Ported     | Easy       |
+| `7_factory_wrap`             | Ported ✅  | Easy       |
+| `8_passing_wrapped`          | Ported ✅  | Easy       |
+| `test_array`                 | Ported ✅  | Easy       |
+| `test_bigint`                | Ported ✅  | Easy       |
 | `test_cannot_run_js`         | Not ported | Medium     |
 | `test_constructor`           | Not ported | Medium     |
 | `test_conversions`           | Not ported | Medium     |
 | `test_dataview`              | Partial    | Easy       |
-| `test_date`                  | Ported     | Easy       |
+| `test_date`                  | Ported ✅  | Easy       |
 | `test_error`                 | Not ported | Medium     |
 | `test_exception`             | Not ported | Medium     |
 | `test_finalizer`             | Not ported | Medium     |
 | `test_function`              | Not ported | Medium     |
 | `test_general`               | Not ported | Hard       |
-| `test_handle_scope`          | Ported     | Easy       |
-| `test_instance_data`         | Ported     | Easy       |
-| `test_new_target`            | Ported     | Easy       |
-| `test_number`                | Ported     | Easy       |
+| `test_handle_scope`          | Ported ✅  | Easy       |
+| `test_instance_data`         | Ported ✅  | Easy       |
+| `test_new_target`            | Ported ✅  | Easy       |
+| `test_number`                | Ported ✅  | Easy       |
 | `test_object`                | Not ported | Hard       |
-| `test_promise`               | Ported     | Easy       |
-| `test_properties`            | Ported     | Easy       |
+| `test_promise`               | Ported ✅  | Easy       |
+| `test_properties`            | Ported ✅  | Easy       |
 | `test_reference`             | Not ported | Medium     |
-| `test_reference_double_free` | Ported     | Easy       |
+| `test_reference_double_free` | Ported ✅  | Easy       |
 | `test_sharedarraybuffer`     | Not ported | Medium     |
 | `test_string`                | Not ported | Medium     |
-| `test_symbol`                | Ported     | Easy       |
+| `test_symbol`                | Ported ✅  | Easy       |
 | `test_typedarray`            | Not ported | Medium     |
 
 ## Runtime-specific (`node-api`)
