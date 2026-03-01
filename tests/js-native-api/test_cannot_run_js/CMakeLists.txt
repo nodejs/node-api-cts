@@ -1,0 +1,5 @@
+add_node_api_cts_addon(test_cannot_run_js test_cannot_run_js.c)
+target_compile_definitions(test_cannot_run_js PRIVATE NAPI_VERSION=10)
+
+add_node_api_cts_addon(test_pending_exception test_cannot_run_js.c)
+target_compile_definitions(test_pending_exception PRIVATE NAPI_VERSION=9)
