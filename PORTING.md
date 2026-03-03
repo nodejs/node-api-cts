@@ -4,6 +4,24 @@ This document tracks the progress of porting tests from Node.js's test suite int
 The source directories are [`test/js-native-api`](https://github.com/nodejs/node/tree/main/test/js-native-api)
 and [`test/node-api`](https://github.com/nodejs/node/tree/main/test/node-api) in the Node.js repository.
 
+## API Naming Convention
+
+Node-API uses two function prefixes that are sometimes confused:
+
+- **`napi_`** — the original prefix, retained for backwards compatibility
+- **`node_api_`** — the newer prefix, adopted after the project was renamed from "napi" to "Node API"
+
+The prefix alone does **not** indicate whether a function is Node.js-specific or runtime-agnostic.
+What matters is which header the function is declared in:
+
+- `js_native_api.h` — engine-agnostic APIs, available across all Node-API runtimes
+- `node_api.h` — runtime-specific APIs, currently defined by Node.js
+
+For example, `node_api_is_sharedarraybuffer` carries the newer `node_api_` prefix but is declared
+in `js_native_api.h` and is therefore engine-agnostic.
+
+## Difficulty Ratings
+
 Difficulty is assessed on two axes:
 - **Size/complexity** — total lines of C/C++ and JS across all source files
 - **Runtime-API dependence** — pure `js_native_api.h` is cheapest; Node.js extensions and direct
@@ -92,24 +110,27 @@ Tests covering the runtime-specific part of Node-API, defined in `node_api.h`.
 ### `node_api_post_finalizer` (`6_object_wrap`, `test_finalizer`)
 
 Both tests call `node_api_post_finalizer` to defer JS-touching work out of the GC finalizer and
-onto the main thread. This is a Node.js extension not guaranteed to be present on other engines.
-The CTS harness will need a platform-agnostic post-finalizer primitive that implementors can map
-to their own deferred-callback mechanism, or the tests need to isolate the post-finalizer cases
-into a Node-specific subtest.
+onto the main thread. The function is declared in `js_native_api.h` but is gated behind
+`NAPI_EXPERIMENTAL`, so not all runtimes may implement it yet. The CTS harness will need a
+platform-agnostic post-finalizer primitive that implementors can map to their own
+deferred-callback mechanism, or the tests need to isolate the post-finalizer cases behind a
+runtime capability check.
 
-### `node_api_set_prototype` / `node_api_get_prototype` (`test_general`, js-native-api)
+### `node_api_set_prototype` / `napi_get_prototype` (`test_general`, js-native-api)
 
-The general test suite mixes standard `js_native_api.h` assertions with calls to
-`node_api_set_prototype` and `node_api_get_prototype`, which are Node.js extensions. These do
-not exist on other engines. The CTS port should split the affected test cases into an engine-agnostic
-core and a Node-only annex, or guard those cases with a runtime capability check.
+The general test suite mixes `js_native_api.h` assertions with calls to `node_api_set_prototype`
+(gated behind `NAPI_EXPERIMENTAL`) and `napi_get_prototype` (standard). The experimental function
+may not be implemented by all runtimes yet. The CTS port should split the affected test cases into
+a stable core and an experimental annex, or guard the `node_api_set_prototype` cases with a
+runtime capability check.
 
 ### SharedArrayBuffer backing-store creation (`test_sharedarraybuffer`)
 
-While `napi_is_sharedarraybuffer` and `napi_get_typedarray_info` are part of `js_native_api.h`,
-the test creates its SharedArrayBuffer via a Node-specific helper. The CTS version will need a
-harness-provided factory (something like `create_shared_array_buffer(size)`) that each runtime
-can implement using its own path.
+`node_api_is_sharedarraybuffer` and `node_api_create_sharedarraybuffer` are both declared in
+`js_native_api.h` and are engine-agnostic. However, the test also exercises creating a
+SharedArrayBuffer from the C side via `node_api_create_sharedarraybuffer`, which allocates
+backing store memory. The CTS version will need a harness-provided factory (something like
+`create_shared_array_buffer(size)`) that each runtime can implement using its own path.
 
 ### libuv dependency (multiple `node-api` tests)
 
