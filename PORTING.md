@@ -15,7 +15,7 @@ The prefix alone does **not** indicate whether a function is Node.js-specific or
 What matters is which header the function is declared in:
 
 - `js_native_api.h` — engine-agnostic APIs, available across all Node-API runtimes
-- `node_api.h` — runtime-specific APIs, currently defined by Node.js
+- `node_api.h` — runtime-specific APIs, providing features beyond pure JavaScript value operations.
 
 For example, `node_api_is_sharedarraybuffer` carries the newer `node_api_` prefix but is declared
 in `js_native_api.h` and is therefore engine-agnostic.
