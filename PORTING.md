@@ -52,7 +52,7 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `test_cannot_run_js`         | Not ported | Medium     |
 | `test_constructor`           | Not ported | Medium     |
 | `test_conversions`           | Not ported | Medium     |
-| `test_dataview`              | Partial    | Easy       |
+| `test_dataview`              | Not ported | Medium     |
 | `test_date`                  | Ported ✅  | Easy       |
 | `test_error`                 | Not ported | Medium     |
 | `test_exception`             | Not ported | Medium     |
