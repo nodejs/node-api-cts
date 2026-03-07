@@ -1,1 +1,0 @@
-add_node_api_cts_addon(test_instance_data test_instance_data.c)
