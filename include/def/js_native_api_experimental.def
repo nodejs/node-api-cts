@@ -1,0 +1,5 @@
+node_api_create_object_with_properties
+node_api_create_sharedarraybuffer
+node_api_is_sharedarraybuffer
+node_api_post_finalizer
+node_api_set_prototype
