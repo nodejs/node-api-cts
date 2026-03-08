@@ -1,20 +1,14 @@
 'use strict';
 const addon = loadAddon('3_callbacks');
 
-let called = false;
-addon.RunCallback((msg) => {
+addon.RunCallback(mustCall((msg) => {
   assert.strictEqual(msg, 'hello world');
-  called = true;
-});
-assert(called);
+}));
 
 function testRecv(desiredRecv) {
-  let recvCalled = false;
-  addon.RunCallbackWithRecv(function() {
+  addon.RunCallbackWithRecv(mustCall(function() {
     assert.strictEqual(this, desiredRecv);
-    recvCalled = true;
-  }, desiredRecv);
-  assert(recvCalled);
+  }), desiredRecv);
 }
 
 testRecv(undefined);

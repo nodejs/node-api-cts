@@ -3,34 +3,27 @@ if (typeof mustCall !== 'function') {
   throw new Error('Expected a global mustCall function');
 }
 
-// mustCall returns a [wrapper, called] tuple
+// mustCall returns a wrapper function (not a tuple)
 {
-  const [wrapper, called] = mustCall();
+  const wrapper = mustCall();
   if (typeof wrapper !== 'function') {
-    throw new Error('mustCall()[0] must be a function');
-  }
-  if (!(called instanceof Promise)) {
-    throw new Error('mustCall()[1] must be a Promise');
+    throw new Error('mustCall() must return a function');
   }
   wrapper();
-  await called;
 }
 
 // mustCall forwards arguments and return value
 {
-  const [wrapper, called] = mustCall((a, b) => a + b);
+  const wrapper = mustCall((a, b) => a + b);
   const result = wrapper(2, 3);
   assert.strictEqual(result, 5);
-  const resolvedValue = await called;
-  assert.strictEqual(resolvedValue, 5);
 }
 
 // mustCall without fn argument works as a no-op wrapper
 {
-  const [wrapper, called] = mustCall();
+  const wrapper = mustCall();
   const result = wrapper('ignored');
   assert.strictEqual(result, undefined);
-  await called;
 }
 
 // mustNotCall is a function
