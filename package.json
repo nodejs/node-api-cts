@@ -8,13 +8,13 @@
     "lint": "eslint",
     "addons:configure": "cmake -S . -B ./build",
     "addons:build": "cmake --build ./build",
-    "addons:clean": "git clean -xf '**/*.node' && rm -rf ./build"
+    "addons:clean": "git clean -xf '**/*.node' && rm -rf ./build",
+    "update-headers": "node scripts/update-headers.mjs"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
-    "globals": "^17.4.0",
-    "node-api-headers": "^1.7.0"
+    "globals": "^17.4.0"
   },
   "dependencies": {
     "amaro": "^1.1.5"

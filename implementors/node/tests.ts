@@ -10,6 +10,12 @@ assert(
 
 const ROOT_PATH = path.resolve(import.meta.dirname, "..", "..");
 const TESTS_ROOT_PATH = path.join(ROOT_PATH, "tests");
+const FEATURES_MODULE_PATH = path.join(
+  ROOT_PATH,
+  "implementors",
+  "node",
+  "features.js"
+);
 const ASSERT_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
@@ -58,6 +64,8 @@ export function runFileInSubprocess(
       [
         // Using file scheme prefix when to enable imports on Windows
         "--expose-gc",
+        "--import",
+        "file://" + FEATURES_MODULE_PATH,
         "--import",
         "file://" + ASSERT_MODULE_PATH,
         "--import",

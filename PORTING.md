@@ -23,87 +23,136 @@ in `js_native_api.h` and is therefore engine-agnostic.
 ## Difficulty Ratings
 
 Difficulty is assessed on two axes:
+
 - **Size/complexity** — total lines of C/C++ and JS across all source files
 - **Runtime-API dependence** — pure `js_native_api.h` is cheapest; Node.js extensions and direct
   libuv calls require harness work or Node-only scoping
 
-| Rating | Meaning |
-|---|---|
-| Easy | Small test, pure `js_native_api.h` or trivial runtime API, straightforward 1:1 port |
-| Medium | Moderate size or uses a Node.js extension API that the harness will need to abstract |
-| Hard | Large test and/or deep libuv/worker/SEA dependency; may need new harness primitives or Node-only scoping |
+| Rating | Meaning                                                                                                  |
+| ------ | -------------------------------------------------------------------------------------------------------- |
+| Easy   | Small test, pure `js_native_api.h` or trivial runtime API, straightforward 1:1 port                      |
+| Medium | Moderate size or uses a Node.js extension API that the harness will need to abstract                     |
+| Hard   | Large test and/or deep libuv/worker/SEA dependency; may need new harness primitives or Node-only scoping |
 
 ## Engine-specific (`js-native-api`)
 
 Tests covering the engine-specific part of Node-API, defined in `js_native_api.h`.
 
-| Directory | Status | Difficulty |
-|---|---|---|
-| `2_function_arguments` | Ported | — |
-| `3_callbacks` | Not ported | Easy |
-| `4_object_factory` | Not ported | Easy |
-| `5_function_factory` | Not ported | Easy |
-| `6_object_wrap` | Not ported | Medium |
-| `7_factory_wrap` | Not ported | Easy |
-| `8_passing_wrapped` | Not ported | Easy |
-| `test_array` | Not ported | Easy |
-| `test_bigint` | Not ported | Easy |
-| `test_cannot_run_js` | Not ported | Medium |
-| `test_constructor` | Not ported | Medium |
-| `test_conversions` | Not ported | Medium |
-| `test_dataview` | Not ported | Easy |
-| `test_date` | Not ported | Easy |
-| `test_error` | Not ported | Medium |
-| `test_exception` | Not ported | Medium |
-| `test_finalizer` | Not ported | Medium |
-| `test_function` | Not ported | Medium |
-| `test_general` | Not ported | Hard |
-| `test_handle_scope` | Not ported | Easy |
-| `test_instance_data` | Not ported | Easy |
-| `test_new_target` | Not ported | Easy |
-| `test_number` | Not ported | Easy |
-| `test_object` | Not ported | Hard |
-| `test_promise` | Not ported | Easy |
-| `test_properties` | Not ported | Easy |
-| `test_reference` | Not ported | Medium |
-| `test_reference_double_free` | Not ported | Easy |
-| `test_sharedarraybuffer` | Not ported | Medium |
-| `test_string` | Not ported | Medium |
-| `test_symbol` | Not ported | Easy |
-| `test_typedarray` | Not ported | Medium |
+| Directory                    | Status     | Difficulty |
+| ---------------------------- | ---------- | ---------- |
+| `2_function_arguments`       | Ported     | —          |
+| `3_callbacks`                | Not ported | Easy       |
+| `4_object_factory`           | Not ported | Easy       |
+| `5_function_factory`         | Not ported | Easy       |
+| `6_object_wrap`              | Not ported | Medium     |
+| `7_factory_wrap`             | Not ported | Easy       |
+| `8_passing_wrapped`          | Not ported | Easy       |
+| `test_array`                 | Not ported | Easy       |
+| `test_bigint`                | Not ported | Easy       |
+| `test_cannot_run_js`         | Not ported | Medium     |
+| `test_constructor`           | Not ported | Medium     |
+| `test_conversions`           | Not ported | Medium     |
+| `test_dataview`              | Not ported | Easy       |
+| `test_date`                  | Not ported | Easy       |
+| `test_error`                 | Not ported | Medium     |
+| `test_exception`             | Not ported | Medium     |
+| `test_finalizer`             | Not ported | Medium     |
+| `test_function`              | Not ported | Medium     |
+| `test_general`               | Not ported | Hard       |
+| `test_handle_scope`          | Not ported | Easy       |
+| `test_instance_data`         | Not ported | Easy       |
+| `test_new_target`            | Not ported | Easy       |
+| `test_number`                | Not ported | Easy       |
+| `test_object`                | Not ported | Hard       |
+| `test_promise`               | Not ported | Easy       |
+| `test_properties`            | Not ported | Easy       |
+| `test_reference`             | Not ported | Medium     |
+| `test_reference_double_free` | Not ported | Easy       |
+| `test_sharedarraybuffer`     | Not ported | Medium     |
+| `test_string`                | Not ported | Medium     |
+| `test_symbol`                | Not ported | Easy       |
+| `test_typedarray`            | Not ported | Medium     |
 
 ## Runtime-specific (`node-api`)
 
 Tests covering the runtime-specific part of Node-API, defined in `node_api.h`.
 
-| Directory | Status | Difficulty |
-|---|---|---|
-| `1_hello_world` | Not ported | Easy |
-| `test_async` | Not ported | Hard |
-| `test_async_cleanup_hook` | Not ported | Hard |
-| `test_async_context` | Not ported | Hard |
-| `test_buffer` | Not ported | Medium |
-| `test_callback_scope` | Not ported | Hard |
-| `test_cleanup_hook` | Not ported | Medium |
-| `test_env_teardown_gc` | Not ported | Easy |
-| `test_exception` | Not ported | Easy |
-| `test_fatal` | Not ported | Hard |
-| `test_fatal_exception` | Not ported | Easy |
-| `test_general` | Not ported | Medium |
-| `test_init_order` | Not ported | Medium |
-| `test_instance_data` | Not ported | Hard |
-| `test_make_callback` | Not ported | Hard |
-| `test_make_callback_recurse` | Not ported | Hard |
-| `test_null_init` | Not ported | Medium |
-| `test_reference_by_node_api_version` | Not ported | Medium |
-| `test_sea_addon` | Not ported | Hard |
-| `test_threadsafe_function` | Not ported | Hard |
-| `test_threadsafe_function_shutdown` | Not ported | Hard |
-| `test_uv_loop` | Not ported | Hard |
-| `test_uv_threadpool_size` | Not ported | Hard |
-| `test_worker_buffer_callback` | Not ported | Hard |
-| `test_worker_terminate` | Not ported | Hard |
-| `test_worker_terminate_finalization` | Not ported | Hard |
+| Directory                            | Status     | Difficulty |
+| ------------------------------------ | ---------- | ---------- |
+| `1_hello_world`                      | Not ported | Easy       |
+| `test_async`                         | Not ported | Hard       |
+| `test_async_cleanup_hook`            | Not ported | Hard       |
+| `test_async_context`                 | Not ported | Hard       |
+| `test_buffer`                        | Not ported | Medium     |
+| `test_callback_scope`                | Not ported | Hard       |
+| `test_cleanup_hook`                  | Not ported | Medium     |
+| `test_env_teardown_gc`               | Not ported | Easy       |
+| `test_exception`                     | Not ported | Easy       |
+| `test_fatal`                         | Not ported | Hard       |
+| `test_fatal_exception`               | Not ported | Easy       |
+| `test_general`                       | Not ported | Medium     |
+| `test_init_order`                    | Not ported | Medium     |
+| `test_instance_data`                 | Not ported | Hard       |
+| `test_make_callback`                 | Not ported | Hard       |
+| `test_make_callback_recurse`         | Not ported | Hard       |
+| `test_null_init`                     | Not ported | Medium     |
+| `test_reference_by_node_api_version` | Not ported | Medium     |
+| `test_sea_addon`                     | Not ported | Hard       |
+| `test_threadsafe_function`           | Not ported | Hard       |
+| `test_threadsafe_function_shutdown`  | Not ported | Hard       |
+| `test_uv_loop`                       | Not ported | Hard       |
+| `test_uv_threadpool_size`            | Not ported | Hard       |
+| `test_worker_buffer_callback`        | Not ported | Hard       |
+| `test_worker_terminate`              | Not ported | Hard       |
+| `test_worker_terminate_finalization` | Not ported | Hard       |
+
+## Experimental Node-API Features
+
+Several tests in the upstream Node.js repository use experimental APIs that are guarded behind
+`#ifdef NAPI_EXPERIMENTAL` in Node.js's `js_native_api.h`.
+
+When `NAPI_EXPERIMENTAL` is defined in Node.js, `NAPI_VERSION` is set to
+`NAPI_VERSION_EXPERIMENTAL (2147483647)`. The `NAPI_MODULE` macro exports this version, and the
+runtime uses it to decide whether to enable experimental behavior for that addon.
+
+| Feature macro                                             | APIs                                                                 | Used by                                           |
+| --------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------- |
+| `NODE_API_EXPERIMENTAL_HAS_SHAREDARRAYBUFFER`             | `node_api_is_sharedarraybuffer`, `node_api_create_sharedarraybuffer` | `test_dataview`, `test_sharedarraybuffer`         |
+| `NODE_API_EXPERIMENTAL_HAS_CREATE_OBJECT_WITH_PROPERTIES` | `node_api_create_object_with_properties`                             | `test_object`                                     |
+| `NODE_API_EXPERIMENTAL_HAS_SET_PROTOTYPE`                 | `node_api_set_prototype`                                             | `test_general`                                    |
+| `NODE_API_EXPERIMENTAL_HAS_POST_FINALIZER`                | `node_api_post_finalizer`                                            | `test_general`, `test_finalizer`, `6_object_wrap` |
+
+Tests that depend on these APIs are currently ported without the experimental test cases (marked
+as "Partial" in the status column) or not ported at all.
+
+### Infrastructure for experimental features
+
+The CTS provides the following infrastructure (see [#26](https://github.com/nodejs/node-api-cts/issues/26)):
+
+1. **Vendored headers** — The `include/` directory contains Node-API headers vendored directly from
+   the Node.js repository (updated via `npm run update-headers`). These include experimental API
+   declarations behind `#ifdef NAPI_EXPERIMENTAL`.
+
+2. **CMake build function** — `add_node_api_cts_experimental_addon()` compiles an addon with
+   `NAPI_EXPERIMENTAL` defined, enabling all experimental API declarations and setting
+   `NAPI_VERSION` to `NAPI_VERSION_EXPERIMENTAL` (2147483647).
+
+3. **Implementor feature declaration** — Each runtime provides a `features.js` harness module that
+   sets `globalThis.experimentalFeatures` to an object declaring which experimental features it
+   supports (e.g., `{ sharedArrayBuffer: true, postFinalizer: true }`).
+
+4. **Conditional test execution** — JS test files guard experimental assertions behind feature
+   checks. When a feature is unsupported, the guarded code silently does not execute.
+
+   ```js
+   if (experimentalFeatures.sharedArrayBuffer) {
+     const addon = loadAddon("test_sharedarraybuffer");
+     // ... assertions
+   }
+   ```
+
+   The `loadAddon` call must be inside the guard because addons linked against experimental
+   symbols will fail to load on runtimes that don't export those symbols.
 
 ## Special Considerations
 
@@ -144,6 +193,7 @@ The following tests call into libuv directly — `napi_get_uv_event_loop`, `uv_t
 - `test_uv_loop`, `test_uv_threadpool_size`
 
 Porting options:
+
 1. **Node-only scope** — mark these tests as Node.js-only and skip on other runtimes.
 2. **Harness abstraction** — introduce a minimal platform-agnostic threading/async API in the
    harness (e.g., `cts_thread_create`, `cts_async_schedule`) that implementors back with their
