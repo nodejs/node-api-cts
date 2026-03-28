@@ -1,0 +1,1 @@
+add_node_api_cts_addon(test_symbol test_symbol.c)

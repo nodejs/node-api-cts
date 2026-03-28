@@ -1,0 +1,1 @@
+add_node_api_cts_addon(5_function_factory 5_function_factory.c)

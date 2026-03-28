@@ -1,0 +1,1 @@
+add_node_api_cts_addon(8_passing_wrapped 8_passing_wrapped.cc myobject.cc)
