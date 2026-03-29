@@ -54,6 +54,8 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `test_conversions`           | Ported ✅  | Medium     |
 | `test_constructor`           | Ported ✅  | Medium     |
 | `test_conversions`           | Not ported | Medium     |
+| `test_constructor`           | Not ported | Medium     |
+| `test_conversions`           | Ported ✅  | Medium     |
 | `test_dataview`              | Not ported | Medium     |
 | `test_date`                  | Ported ✅  | Easy       |
 | `test_error`                 | Ported ✅  | Medium     |
