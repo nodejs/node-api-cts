@@ -1,0 +1,2 @@
+add_node_api_cts_addon(test_reference test_reference.c)
+add_node_api_cts_addon(test_finalizer test_finalizer.c)
