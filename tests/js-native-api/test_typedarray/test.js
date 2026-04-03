@@ -94,7 +94,6 @@ nonByteArrayTypes.forEach((currentType) => {
       currentType.BYTES_PER_ELEMENT + 1,
       1,
     );
-    console.log(`start of offset ${currentType}`);
   }, RangeError);
 });
 
