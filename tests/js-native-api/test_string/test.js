@@ -1,5 +1,12 @@
 "use strict";
 
+// test_string addon requires Node-API version >= 10
+// (node_api_create_external_string_latin1/utf16).
+// Node-API 10 is supported in Node.js >= 22.14.0 and >= 23.6.0.
+if (Number(napiVersion) < 10) {
+  skipTest();
+}
+
 // Testing api calls for string
 const test_string = loadAddon("test_string");
 // The insufficient buffer test case allocates a buffer of size 4, including
