@@ -1,0 +1,1 @@
+add_node_api_cts_addon(test_constructor test_constructor.c test_null.c)
