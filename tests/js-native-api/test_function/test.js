@@ -30,8 +30,7 @@ assert.strictEqual(test_function.TestNameShort.name, "Name_");
 let tracked_function = test_function.MakeTrackedFunction(mustCall());
 assert(!!tracked_function);
 tracked_function = null;
-let gcCount = 0;
-await gcUntil("test", () => gcCount++ > 0);
+gc();
 
 assert.deepStrictEqual(test_function.TestCreateFunctionParameters(), {
   envIsNull: "Invalid argument",
