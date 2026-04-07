@@ -15,6 +15,7 @@ export default defineConfig([
         loadAddon: "readonly",
         mustCall: "readonly",
         mustNotCall: "readonly",
+        gc: "readonly",
         gcUntil: "readonly",
         experimentalFeatures: "readonly",
         onUncaughtException: "readonly",

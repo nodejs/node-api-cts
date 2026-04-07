@@ -19,6 +19,5 @@ onUncaughtException(
       }),
     );
   }
-  let gcCount = 1;
-  await gcUntil("test", () => gcCount-- > 0);
+  gc();
 })().then(mustCall());

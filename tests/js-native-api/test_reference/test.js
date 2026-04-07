@@ -164,6 +164,5 @@ runTests();
 for (let i = 0; i < 1000; i++) {
   const wrapObject = new Object();
   test_reference.validateDeleteBeforeFinalize(wrapObject);
-  let gcCount = 1;
-  gcUntil("test", () => gcCount-- <= 0);
+  gc();
 }
