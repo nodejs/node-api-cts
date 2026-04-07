@@ -36,6 +36,11 @@ assert.strictEqual(externalResult[0], 0);
 assert.strictEqual(externalResult[1], 1);
 assert.strictEqual(externalResult[2], 2);
 
+// Float16Array is an ES2025 addition; not exposed by default in older V8
+// versions (e.g. those shipped with Node 20.x / 22.x). Detect at runtime and
+// only exercise the Float16Array code paths when the engine supports it.
+const hasFloat16Array = typeof Float16Array !== "undefined";
+
 // Validate creation of all kinds of TypedArrays
 const buffer = new ArrayBuffer(128);
 const arrayTypes = [
@@ -46,7 +51,7 @@ const arrayTypes = [
   Uint16Array,
   Int32Array,
   Uint32Array,
-  Float16Array,
+  ...(hasFloat16Array ? [Float16Array] : []),
   Float32Array,
   Float64Array,
   BigInt64Array,
@@ -79,7 +84,7 @@ const nonByteArrayTypes = [
   Uint16Array,
   Int32Array,
   Uint32Array,
-  Float16Array,
+  ...(hasFloat16Array ? [Float16Array] : []),
   Float32Array,
   Float64Array,
   BigInt64Array,
