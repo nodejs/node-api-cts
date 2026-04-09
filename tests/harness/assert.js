@@ -78,6 +78,14 @@ if (typeof assert.throws !== 'function') {
 }
 assert.throws(() => { throw new Error('oops'); }, /oops/);
 assert.throws(() => { throw new TypeError('bad'); }, TypeError);
+assert.throws(
+  () => { const err = new Error('match me'); err.code = 'ERR_TEST'; throw err; },
+  { code: 'ERR_TEST', message: 'match me' },
+);
+assert.throws(
+  () => { throw new RangeError('validate me'); },
+  (err) => err instanceof RangeError && err.message === 'validate me',
+);
 threw = false;
 try { assert.throws(() => { /* does not throw */ }); } catch { threw = true; }
 if (!threw) throw new Error('assert.throws must throw when fn does not throw');
