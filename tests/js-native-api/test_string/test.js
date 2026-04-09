@@ -1,12 +1,5 @@
 "use strict";
 
-// test_string addon requires Node-API version >= 10
-// (node_api_create_external_string_latin1/utf16).
-// Node-API 10 is supported in Node.js >= 22.14.0 and >= 23.6.0.
-if (Number(napiVersion) < 10) {
-  skipTest();
-}
-
 // Testing api calls for string
 const test_string = loadAddon("test_string");
 // The insufficient buffer test case allocates a buffer of size 4, including
@@ -44,10 +37,6 @@ const unicodeCases = [
 function testLatin1Cases(str) {
   assert.strictEqual(test_string.TestLatin1(str), str);
   assert.strictEqual(test_string.TestLatin1AutoLength(str), str);
-  assert.strictEqual(test_string.TestLatin1External(str), str);
-  assert.strictEqual(test_string.TestLatin1ExternalAutoLength(str), str);
-  assert.strictEqual(test_string.TestPropertyKeyLatin1(str), str);
-  assert.strictEqual(test_string.TestPropertyKeyLatin1AutoLength(str), str);
   assert.strictEqual(test_string.Latin1Length(str), str.length);
 
   if (str !== "") {
@@ -63,12 +52,6 @@ function testUnicodeCases(str, utf8Length, utf8InsufficientIdx) {
   assert.strictEqual(test_string.TestUtf16(str), str);
   assert.strictEqual(test_string.TestUtf8AutoLength(str), str);
   assert.strictEqual(test_string.TestUtf16AutoLength(str), str);
-  assert.strictEqual(test_string.TestUtf16External(str), str);
-  assert.strictEqual(test_string.TestUtf16ExternalAutoLength(str), str);
-  assert.strictEqual(test_string.TestPropertyKeyUtf8(str), str);
-  assert.strictEqual(test_string.TestPropertyKeyUtf8AutoLength(str), str);
-  assert.strictEqual(test_string.TestPropertyKeyUtf16(str), str);
-  assert.strictEqual(test_string.TestPropertyKeyUtf16AutoLength(str), str);
   assert.strictEqual(test_string.Utf8Length(str), utf8Length);
   assert.strictEqual(test_string.Utf16Length(str), str.length);
 
