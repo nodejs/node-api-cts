@@ -50,7 +50,7 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `test_array`                 | Ported ✅  | Easy       |
 | `test_bigint`                | Ported ✅  | Easy       |
 | `test_cannot_run_js`         | Not ported | Medium     |
-| `test_constructor`           | Not ported | Medium     |
+| `test_constructor`           | Ported ✅  | Medium     |
 | `test_conversions`           | Not ported | Medium     |
 | `test_dataview`              | Not ported | Medium     |
 | `test_date`                  | Ported ✅  | Easy       |
