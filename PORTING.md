@@ -71,7 +71,7 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `test_sharedarraybuffer`     | Not ported | Medium     |
 | `test_string`                | Not ported | Medium     |
 | `test_symbol`                | Ported ✅  | Easy       |
-| `test_typedarray`            | Not ported | Medium     |
+| `test_typedarray`            | Ported ✅  | Medium     |
 
 ## Runtime-specific (`node-api`)
 
