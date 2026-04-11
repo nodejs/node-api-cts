@@ -8,9 +8,6 @@ if (Number(napiVersion) < 10) {
 }
 
 const test_string_v10 = loadAddon("test_string_v10");
-// The insufficient buffer test case allocates a buffer of size 4, including
-// the null terminator.
-const kInsufficientIdx = 3;
 
 const asciiCases = [
   "",
