@@ -5,16 +5,18 @@
   "type": "module",
   "scripts": {
     "node:test": "node --test ./implementors/node/run-tests.ts",
-    "lint": "eslint",
+    "lint": "eslint && tsc",
     "addons:configure": "cmake -S . -B ./build",
     "addons:build": "cmake --build ./build",
     "addons:clean": "git clean -xf '**/*.node' && rm -rf ./build",
     "update-headers": "node scripts/update-headers.mjs"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
-    "globals": "^17.4.0"
+    "globals": "^17.4.0",
+    "typescript-eslint": "^8.58.0"
   },
   "dependencies": {
     "amaro": "^1.1.5"

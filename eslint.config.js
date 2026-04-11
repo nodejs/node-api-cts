@@ -1,10 +1,16 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(["node"]),
+  globalIgnores(["**/CMakeFiles/**"]),
+  eslint.configs.recommended,
+  tseslint.configs.recommended,
   {
-    files: ["tests/**/*.js"],
+    files: [
+      "tests/**/*.js",
+    ],
     languageOptions: {
       // Only allow ECMAScript built-ins and CTS harness globals.
       // This causes no-undef to flag any runtime-specific API (setTimeout, process, Buffer, etc.).
@@ -19,6 +25,8 @@ export default defineConfig([
         gcUntil: "readonly",
         experimentalFeatures: "readonly",
         onUncaughtException: "readonly",
+        napiVersion: "readonly",
+        skipTest: "readonly",
       },
     },
     rules: {
@@ -42,6 +50,18 @@ export default defineConfig([
             "Avoid global access in test files — use CTS harness globals instead",
         },
       ],
+    },
+  },
+  {
+    files: [
+      "implementors/**/*.{js,ts}",
+      "scripts/**/*.{js,mjs}",
+    ],
+    languageOptions: {
+      globals: {
+        ...globals.es2025,
+        ...globals.node,
+      },
     },
   },
 ]);
