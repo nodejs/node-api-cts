@@ -7,3 +7,9 @@ globalThis.experimentalFeatures = {
   setPrototype: true,
   postFinalizer: true,
 };
+
+globalThis.napiVersion = Number(process.versions.napi);
+
+globalThis.skipTest = () => {
+  process.exit(0);
+};

@@ -23,6 +23,8 @@ export default defineConfig([
         mustNotCall: "readonly",
         gcUntil: "readonly",
         experimentalFeatures: "readonly",
+        napiVersion: "readonly",
+        skipTest: "readonly",
       },
     },
     rules: {
