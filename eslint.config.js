@@ -9,7 +9,7 @@ export default defineConfig([
   tseslint.configs.recommended,
   {
     files: [
-      "tests/**/*.js",
+      "tests/**/*.{mjs,js}",
     ],
     languageOptions: {
       // Only allow ECMAScript built-ins and CTS harness globals.
@@ -23,6 +23,7 @@ export default defineConfig([
         mustNotCall: "readonly",
         gc: "readonly",
         gcUntil: "readonly",
+        spawnTest: "readonly",
         experimentalFeatures: "readonly",
         napiVersion: "readonly",
         skipTest: "readonly",
