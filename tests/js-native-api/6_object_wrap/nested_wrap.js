@@ -1,4 +1,5 @@
 'use strict';
+if (napiVersion < 10) skipTest();
 const addon = loadAddon('nested_wrap');
 
 // This test verifies that ObjectWrap and napi_ref can be nested and finalized
