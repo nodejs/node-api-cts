@@ -9,7 +9,3 @@ globalThis.experimentalFeatures = {
 };
 
 globalThis.napiVersion = Number(process.versions.napi);
-
-globalThis.skipTest = () => {
-  process.exit(0);
-};
