@@ -6,11 +6,14 @@
 // `napi_get_property()` on a property of the global object and will abort the
 // process if the API doesn't return the correct status.
 
-const addon_v8 = loadAddon('test_pending_exception');
-const addon_new = loadAddon('test_cannot_run_js');
+if (napiVersion < 10) skipTest();
+const addon_v8 = loadAddon("test_pending_exception");
+const addon_new = loadAddon("test_cannot_run_js");
 
 function runTests(addon) {
-  addon.createRef(function() { throw new Error('function should not have been called'); });
+  addon.createRef(function () {
+    throw new Error("function should not have been called");
+  });
 }
 
 function runAllTests() {
