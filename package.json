@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "node:test": "node --test ./implementors/node/run-tests.ts",
-    "lint": "eslint",
+    "lint": "eslint && tsc",
     "addons:configure": "cmake -S . -B ./build",
     "addons:build": "cmake --build ./build",
     "addons:clean": "git clean -xf '**/*.node' && rm -rf ./build",
