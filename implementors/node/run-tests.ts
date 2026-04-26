@@ -1,36 +1,25 @@
 import path from "node:path";
-import { test, type TestContext } from "node:test";
+import { test } from "node:test";
 
 import { listDirectoryEntries, runFileInSubprocess } from "./tests.ts";
 
 const ROOT_PATH = path.resolve(import.meta.dirname, "..", "..");
 const TESTS_ROOT_PATH = path.join(ROOT_PATH, "tests");
 
-async function populateSuite(
-  testContext: TestContext,
+function populateSuite(
   dir: string
-): Promise<void> {
+) {
   const { directories, files } = listDirectoryEntries(dir);
 
   for (const file of files) {
-    await testContext.test(file, () => runFileInSubprocess(dir, file));
+    test(path.relative(TESTS_ROOT_PATH, path.join(dir, file)), () => runFileInSubprocess(dir, file));
   }
 
   for (const directory of directories) {
-    await testContext.test(directory, async (subTest) => {
-      await populateSuite(subTest, path.join(dir, directory));
-    });
+    populateSuite(path.join(dir, directory));
   }
 }
 
-test("harness", async (t) => {
-  await populateSuite(t, path.join(TESTS_ROOT_PATH, "harness"));
-});
-
-test("js-native-api", async (t) => {
-  await populateSuite(t, path.join(TESTS_ROOT_PATH, "js-native-api"));
-});
-
-test("node-api", async (t) => {
-  await populateSuite(t, path.join(TESTS_ROOT_PATH, "node-api"));
-});
+populateSuite(path.join(TESTS_ROOT_PATH, "harness"));
+populateSuite(path.join(TESTS_ROOT_PATH, "js-native-api"));
+populateSuite(path.join(TESTS_ROOT_PATH, "node-api"));
