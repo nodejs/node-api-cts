@@ -81,8 +81,6 @@ export function runFileInSubprocess(
         "file://" + GC_MODULE_PATH,
         "--import",
         "file://" + MUST_CALL_MODULE_PATH,
-        // test_finalizer needs this
-        "--force-node-api-uncaught-exceptions-policy",
         "--import",
         "file://" + ON_UNCAUGHT_EXCEPTION_MODULE_PATH,
         filePath,
