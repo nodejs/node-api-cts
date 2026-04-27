@@ -41,6 +41,18 @@ const ON_UNCAUGHT_EXCEPTION_MODULE_PATH = path.join(
   "node",
   "on-uncaught-exception.js",
 );
+const SKIP_TEST_MODULE_PATH = path.join(
+  ROOT_PATH,
+  "implementors",
+  "node",
+  "skip-test.js",
+);
+const NAPI_VERSION_MODULE_PATH = path.join(
+  ROOT_PATH,
+  "implementors",
+  "node",
+  "napi-version.js",
+);
 
 export function listDirectoryEntries(dir: string) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -83,6 +95,10 @@ export function runFileInSubprocess(
         "file://" + MUST_CALL_MODULE_PATH,
         "--import",
         "file://" + ON_UNCAUGHT_EXCEPTION_MODULE_PATH,
+        "--import",
+        "file://" + SKIP_TEST_MODULE_PATH,
+        "--import",
+        "file://" + NAPI_VERSION_MODULE_PATH,
         filePath,
       ],
       { cwd },
