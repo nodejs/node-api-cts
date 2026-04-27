@@ -7,7 +7,3 @@ globalThis.experimentalFeatures = {
   setPrototype: true,
   postFinalizer: true,
 };
-
-globalThis.skipTest = () => {
-  process.exit(0);
-};
