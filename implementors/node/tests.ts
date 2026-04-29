@@ -33,7 +33,7 @@ const MUST_CALL_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "must-call.js",
+  "must-call.js"
 );
 const SKIP_TEST_MODULE_PATH = path.join(
   ROOT_PATH,
