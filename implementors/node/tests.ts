@@ -122,9 +122,9 @@ export function runFileInSubprocess(
         new Error(
           `Test file ${path.relative(
             TESTS_ROOT_PATH,
-            filePath,
-          )} failed (${reason})${stderrSuffix}`,
-        ),
+            filePath
+          )} failed (${reason})${stderrSuffix}`
+        )
       );
     });
   });
