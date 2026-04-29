@@ -5,7 +5,7 @@ import path from "node:path";
 
 assert(
   typeof import.meta.dirname === "string",
-  "Expecting a recent Node.js runtime API version",
+  "Expecting a recent Node.js runtime API version"
 );
 
 const ROOT_PATH = path.resolve(import.meta.dirname, "..", "..");
