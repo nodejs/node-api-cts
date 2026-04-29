@@ -69,7 +69,7 @@ export function listDirectoryEntries(dir: string) {
 
 export function runFileInSubprocess(
   cwd: string,
-  filePath: string,
+  filePath: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const child = spawn(
