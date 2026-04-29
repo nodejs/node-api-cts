@@ -14,7 +14,7 @@ const FEATURES_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "features.js",
+  "features.js"
 );
 const ASSERT_MODULE_PATH = path.join(
   ROOT_PATH,
