@@ -26,7 +26,7 @@ const LOAD_ADDON_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "load-addon.js",
+  "load-addon.js"
 );
 const GC_MODULE_PATH = path.join(ROOT_PATH, "implementors", "node", "gc.js");
 const MUST_CALL_MODULE_PATH = path.join(
