@@ -20,7 +20,7 @@ const ASSERT_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "assert.js",
+  "assert.js"
 );
 const LOAD_ADDON_MODULE_PATH = path.join(
   ROOT_PATH,
