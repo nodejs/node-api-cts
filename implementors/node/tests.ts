@@ -93,7 +93,7 @@ export function runFileInSubprocess(
         "file://" + NAPI_VERSION_MODULE_PATH,
         filePath,
       ],
-      { cwd },
+      { cwd }
     );
 
     let stderrOutput = "";
