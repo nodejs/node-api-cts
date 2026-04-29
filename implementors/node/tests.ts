@@ -45,7 +45,7 @@ const NAPI_VERSION_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "napi-version.js",
+  "napi-version.js"
 );
 
 export function listDirectoryEntries(dir: string) {
