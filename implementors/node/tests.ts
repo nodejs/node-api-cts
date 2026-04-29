@@ -39,7 +39,7 @@ const SKIP_TEST_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "skip-test.js",
+  "skip-test.js"
 );
 const NAPI_VERSION_MODULE_PATH = path.join(
   ROOT_PATH,
