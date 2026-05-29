@@ -33,16 +33,6 @@ if (typeof spawnTest !== 'function') {
   assert.strictEqual(typeof result.stderr, 'string');
 }
 
-// nodeFlags are forwarded to the child: without --stack-trace-limit=42 the
-// child sees V8's default and exits non-zero; passing it makes the child exit 0.
-{
-  const withoutFlag = spawnTest('spawn-test-flag-child.mjs');
-  assert.notStrictEqual(withoutFlag.status, 0, 'flag child should fail without --stack-trace-limit=42');
-
-  const withFlag = spawnTest('spawn-test-flag-child.mjs', { nodeFlags: ['--stack-trace-limit=42'] });
-  assert.strictEqual(withFlag.status, 0, `flag child exited with status ${withFlag.status}; stderr:\n${withFlag.stderr}`);
-}
-
 // cwd is forwarded to the child: running from the parent of tests/harness
 // makes the bare child filename unresolvable. The child's stderr must name
 // the specific file Node tried to load, proving cwd actually shifted.

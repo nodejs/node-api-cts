@@ -18,15 +18,13 @@ const HARNESS_MODULE_PATHS = [
  *
  * @param {string} filePath - Path to the JS/MJS file to execute. Resolved
  *   against `options.cwd` if relative.
- * @param {{ cwd?: string, nodeFlags?: string[] }} [options]
+ * @param {{ cwd?: string }} [options]
  *   - `cwd`: working directory for the child; defaults to `process.cwd()`.
- *   - `nodeFlags`: extra CLI flags passed to `node`, in addition to the
- *     always-present `--expose-gc` (the harness `gc.js` module requires it).
  * @returns {{ status: number | null, signal: NodeJS.Signals | null, stdout: string, stderr: string }}
  */
 export const spawnTest = (filePath, options = {}) => {
   // --expose-gc is mandatory: gc.js (loaded below) throws at import without it.
-  const args = ["--expose-gc", ...(options.nodeFlags ?? [])];
+  const args = ["--expose-gc"];
   for (const modulePath of HARNESS_MODULE_PATHS) {
     args.push("--import", "file://" + modulePath);
   }

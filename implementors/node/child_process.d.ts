@@ -1,6 +1,5 @@
 export interface SpawnTestOptions {
   cwd?: string;
-  nodeFlags?: string[];
 }
 
 export interface SpawnTestResult {
