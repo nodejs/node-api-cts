@@ -1,5 +1,4 @@
 "use strict";
-// Flags: --expose-gc
 
 const test_reference = loadAddon("test_reference");
 
