@@ -89,3 +89,19 @@ assert.throws(
 threw = false;
 try { assert.throws(() => { /* does not throw */ }); } catch { threw = true; }
 if (!threw) throw new Error('assert.throws must throw when fn does not throw');
+
+// assert.match
+if (typeof assert.match !== 'function') {
+  throw new Error('Expected assert.match to be a function');
+}
+assert.match('hello world', /hello/);
+assert.match('abc123', /^[a-z]+\d+$/);
+threw = false;
+try { assert.match('hello', /world/); } catch { threw = true; }
+if (!threw) throw new Error('assert.match("hello", /world/) must throw');
+threw = false;
+try { assert.match(123, /\d+/); } catch { threw = true; }
+if (!threw) throw new Error('assert.match must throw when input is not a string');
+threw = false;
+try { assert.match('hello', 'hello'); } catch { threw = true; }
+if (!threw) throw new Error('assert.match must throw when pattern is not a RegExp');
