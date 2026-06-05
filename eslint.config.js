@@ -31,24 +31,12 @@ export default defineConfig([
     },
     rules: {
       "no-undef": "error",
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: ["*"],
-        },
-      ],
-      "no-restricted-syntax": [
-        "error",
-        {
-          selector: "MemberExpression[object.name='globalThis']",
-          message:
-            "Avoid globalThis access in test files — use CTS harness globals instead",
-        },
-        {
-          selector: "MemberExpression[object.name='global']",
-          message:
-            "Avoid global access in test files — use CTS harness globals instead",
-        },
+      "no-restricted-imports": ["error", {
+        patterns: ["*"],
+      }],
+      "no-restricted-syntax": ["error",
+        { selector: "MemberExpression[object.name='globalThis']", message: "Avoid globalThis access in test files — use CTS harness globals instead" },
+        { selector: "MemberExpression[object.name='global']", message: "Avoid global access in test files — use CTS harness globals instead" }
       ],
     },
   },

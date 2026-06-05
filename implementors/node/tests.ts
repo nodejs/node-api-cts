@@ -5,7 +5,7 @@ import path from "node:path";
 
 assert(
   typeof import.meta.dirname === "string",
-  "Expecting a recent Node.js runtime API version",
+  "Expecting a recent Node.js runtime API version"
 );
 
 const ROOT_PATH = path.resolve(import.meta.dirname, "..", "..");
@@ -14,44 +14,44 @@ const FEATURES_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "features.js",
+  "features.js"
 );
 const ASSERT_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "assert.js",
+  "assert.js"
 );
 const LOAD_ADDON_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "load-addon.js",
+  "load-addon.js"
 );
 const GC_MODULE_PATH = path.join(ROOT_PATH, "implementors", "node", "gc.js");
 const MUST_CALL_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "must-call.js",
+  "must-call.js"
 );
 const ON_UNCAUGHT_EXCEPTION_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "on-uncaught-exception.js",
+  "on-uncaught-exception.js"
 );
 const SKIP_TEST_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "skip-test.js",
+  "skip-test.js"
 );
 const NAPI_VERSION_MODULE_PATH = path.join(
   ROOT_PATH,
   "implementors",
   "node",
-  "napi-version.js",
+  "napi-version.js"
 );
 
 export function listDirectoryEntries(dir: string) {
@@ -75,7 +75,7 @@ export function listDirectoryEntries(dir: string) {
 
 export function runFileInSubprocess(
   cwd: string,
-  filePath: string,
+  filePath: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const child = spawn(
@@ -101,7 +101,7 @@ export function runFileInSubprocess(
         "file://" + NAPI_VERSION_MODULE_PATH,
         filePath,
       ],
-      { cwd },
+      { cwd }
     );
 
     let stderrOutput = "";
@@ -130,9 +130,9 @@ export function runFileInSubprocess(
         new Error(
           `Test file ${path.relative(
             TESTS_ROOT_PATH,
-            filePath,
-          )} failed (${reason})${stderrSuffix}`,
-        ),
+            filePath
+          )} failed (${reason})${stderrSuffix}`
+        )
       );
     });
   });

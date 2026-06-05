@@ -2,7 +2,7 @@
 // Each key corresponds to a NODE_API_EXPERIMENTAL_HAS_* compile-time macro.
 // Other implementors should set unsupported features to false or omit them.
 
-const [major, minor, patch] = process.version.slice(1).split(".").map(Number);
+const [major, minor, patch] = process.version.slice(1).split('.').map(Number);
 
 globalThis.experimentalFeatures = {
   // node_api_is_sharedarraybuffer and node_api_create_sharedarraybuffer were
