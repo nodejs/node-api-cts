@@ -17,11 +17,12 @@ Run the following command to run the tests:
 $ npm run node:test
 ```
 
-To run a specific test file, use the `--test-name-pattern` flag:
+To run a specific test suite or file, use the `--test-name-pattern` flag:
 
 ```bash
-$ NODE_OPTIONS=--test-name-pattern=js-native-api/test_constructor/test_null npm run node:test
+$ NODE_OPTIONS=--test-name-pattern=test_constructor npm run node:test
 ```
 
-The test names are their relative path to the `tests` folder, with file extensions.
+The pattern matches against suite names (directory names) and test names (file names)
+at any level of the hierarchy. When a suite matches, all tests inside it run.
 The pattern can be a regular expression.

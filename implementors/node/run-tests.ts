@@ -1,25 +1,33 @@
 import path from "node:path";
-import { test } from "node:test";
+import { suite, test } from "node:test";
 
 import { listDirectoryEntries, runFileInSubprocess } from "./tests.ts";
 
 const ROOT_PATH = path.resolve(import.meta.dirname, "..", "..");
 const TESTS_ROOT_PATH = path.join(ROOT_PATH, "tests");
 
-function populateSuite(
-  dir: string
-) {
+function populateSuite(dir: string) {
   const { directories, files } = listDirectoryEntries(dir);
 
   for (const file of files) {
-    test(path.relative(TESTS_ROOT_PATH, path.join(dir, file)), () => runFileInSubprocess(dir, file));
+    test(file, () => runFileInSubprocess(dir, file));
   }
 
   for (const directory of directories) {
-    populateSuite(path.join(dir, directory));
+    suite(directory, () => {
+      populateSuite(path.join(dir, directory));
+    });
   }
 }
 
-populateSuite(path.join(TESTS_ROOT_PATH, "harness"));
-populateSuite(path.join(TESTS_ROOT_PATH, "js-native-api"));
-populateSuite(path.join(TESTS_ROOT_PATH, "node-api"));
+suite("harness", () => {
+  populateSuite(path.join(TESTS_ROOT_PATH, "harness"));
+});
+
+suite("js-native-api", () => {
+  populateSuite(path.join(TESTS_ROOT_PATH, "js-native-api"));
+});
+
+suite("node-api", () => {
+  populateSuite(path.join(TESTS_ROOT_PATH, "node-api"));
+});
