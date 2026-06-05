@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 // SharedArrayBuffer support is an experimental feature.
 if (!experimentalFeatures.sharedArrayBuffer) {
   skipTest();
 }
 
-const test_sharedarraybuffer = loadAddon("test_sharedarraybuffer");
+const test_sharedarraybuffer = loadAddon('test_sharedarraybuffer');
 
 {
   const sab = new SharedArrayBuffer(16);
@@ -86,6 +86,6 @@ const test_sharedarraybuffer = loadAddon("test_sharedarraybuffer");
     () => {
       test_sharedarraybuffer.TestGetSharedArrayBufferInfo({});
     },
-    { name: "Error", message: "Invalid argument" },
+    { name: 'Error', message: 'Invalid argument' },
   );
 }

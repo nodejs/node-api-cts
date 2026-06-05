@@ -5,7 +5,7 @@ import {
   deepStrictEqual,
   throws,
   match,
-} from "node:assert/strict";
+} from 'node:assert/strict';
 
 const assert = Object.assign((value, message) => ok(value, message), {
   ok: (value, message) => ok(value, message),

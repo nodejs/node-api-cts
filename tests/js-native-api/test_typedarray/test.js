@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 // Testing api calls for arrays
-const test_typedarray = loadAddon("test_typedarray");
+const test_typedarray = loadAddon('test_typedarray');
 
 const byteArray = new Uint8Array(3);
 byteArray[0] = 0;
@@ -39,7 +39,7 @@ assert.strictEqual(externalResult[2], 2);
 // Float16Array is an ES2025 addition; not exposed by default in older V8
 // versions (e.g. those shipped with Node 20.x / 22.x). Detect at runtime and
 // only exercise the Float16Array code paths when the engine supports it.
-const hasFloat16Array = typeof Float16Array !== "undefined";
+const hasFloat16Array = typeof Float16Array !== 'undefined';
 
 // Validate creation of all kinds of TypedArrays
 const buffer = new ArrayBuffer(128);
@@ -64,7 +64,7 @@ arrayTypes.forEach((currentType) => {
 
   assert.ok(
     theArray instanceof currentType,
-    "Type of new array should match that of the template. " +
+    'Type of new array should match that of the template. ' +
       `Expected type: ${currentType.name}, ` +
       `actual type: ${template.constructor.name}`,
   );
