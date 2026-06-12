@@ -1,26 +1,26 @@
-"use strict";
+'use strict';
 
 // Testing api calls for string
-const test_string = loadAddon("test_string");
+const test_string = loadAddon('test_string');
 // The insufficient buffer test case allocates a buffer of size 4, including
 // the null terminator.
 const kInsufficientIdx = 3;
 
 const asciiCases = [
-  "",
-  "hello world",
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+  '',
+  'hello world',
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
   "?!@#$%^&*()_+-=[]{}/.,<>'\"\\",
 ];
 
 const latin1Cases = [
   {
-    str: "¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿",
+    str: '¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿',
     utf8Length: 62,
     utf8InsufficientIdx: 1,
   },
   {
-    str: "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ",
+    str: 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ',
     utf8Length: 126,
     utf8InsufficientIdx: 1,
   },
@@ -28,7 +28,7 @@ const latin1Cases = [
 
 const unicodeCases = [
   {
-    str: "\u{2003}\u{2101}\u{2001}\u{202}\u{2011}",
+    str: '\u{2003}\u{2101}\u{2001}\u{202}\u{2011}',
     utf8Length: 14,
     utf8InsufficientIdx: 1,
   },
@@ -39,7 +39,7 @@ function testLatin1Cases(str) {
   assert.strictEqual(test_string.TestLatin1AutoLength(str), str);
   assert.strictEqual(test_string.Latin1Length(str), str.length);
 
-  if (str !== "") {
+  if (str !== '') {
     assert.strictEqual(
       test_string.TestLatin1Insufficient(str),
       str.slice(0, kInsufficientIdx),
@@ -55,7 +55,7 @@ function testUnicodeCases(str, utf8Length, utf8InsufficientIdx) {
   assert.strictEqual(test_string.Utf8Length(str), utf8Length);
   assert.strictEqual(test_string.Utf16Length(str), str.length);
 
-  if (str !== "") {
+  if (str !== '') {
     assert.strictEqual(
       test_string.TestUtf8Insufficient(str),
       str.slice(0, utf8InsufficientIdx),
@@ -91,4 +91,4 @@ assert.throws(() => {
   test_string.TestLargeUtf16();
 }, /^Error: Invalid argument$/);
 
-test_string.TestMemoryCorruption(" ".repeat(64 * 1024));
+test_string.TestMemoryCorruption(' '.repeat(64 * 1024));

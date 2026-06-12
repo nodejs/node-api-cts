@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // napi_create_dataview accepts a SharedArrayBuffer-backed buffer only on newer
 // Node.js releases (see implementors/node/features.js).
@@ -7,7 +7,7 @@ if (!experimentalFeatures.dataviewSharedArrayBuffer) {
 }
 
 // Testing api calls for dataview backed by a SharedArrayBuffer
-const test_dataview = loadAddon("test_dataview");
+const test_dataview = loadAddon('test_dataview');
 
 // Test for creating dataview with SharedArrayBuffer
 {

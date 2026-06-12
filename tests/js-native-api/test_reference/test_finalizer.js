@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 // Flags: --expose-gc --force-node-api-uncaught-exceptions-policy
 
-const binding = loadAddon("test_finalizer");
+const binding = loadAddon('test_finalizer');
 
 onUncaughtException(
   mustCall((err) => {
@@ -11,11 +11,11 @@ onUncaughtException(
   }),
 );
 
-(async function () {
+(async function() {
   {
     binding.createExternalWithJsFinalize(
       mustCall(() => {
-        throw new Error("finalizer error");
+        throw new Error('finalizer error');
       }),
     );
   }
