@@ -102,6 +102,7 @@ export default defineConfig([
         gc: 'readonly',
         gcUntil: 'readonly',
         experimentalFeatures: 'readonly',
+        runtimeFeatures: 'readonly',
         onUncaughtException: 'readonly',
         napiVersion: 'readonly',
         skipTest: 'readonly',
