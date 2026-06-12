@@ -4,7 +4,7 @@ export interface SpawnTestOptions {
 
 export interface SpawnTestResult {
   status: number | null;
-  signal: NodeJS.Signals | null;
+  aborted: boolean;
   stdout: string;
   stderr: string;
 }

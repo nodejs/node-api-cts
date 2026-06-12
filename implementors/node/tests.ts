@@ -32,14 +32,14 @@ export function listDirectoryEntries(dir: string) {
 }
 
 export function runFileInSubprocess(cwd: string, filePath: string): void {
-  const { status, signal, stdout, stderr } = spawnTest(filePath, { cwd });
+  const { status, aborted, stdout, stderr } = spawnTest(filePath, { cwd });
 
   if (stdout) process.stdout.write(stdout);
 
   if (status === 0) return;
 
   const reason =
-    status !== null ? `exit code ${status}` : `signal ${signal ?? 'unknown'}`;
+    status !== null ? `exit code ${status}` : aborted ? 'aborted' : 'unknown';
   const trimmedStderr = stderr.trim();
   const stderrSuffix = trimmedStderr ?
     `\n--- stderr ---\n${trimmedStderr}\n--- end stderr ---` :

@@ -8,7 +8,7 @@ if (typeof spawnTest !== 'function') {
 {
   const result = spawnTest('spawn-test-ok-child.mjs');
   assert.strictEqual(result.status, 0, `ok child exited with status ${result.status}; stderr:\n${result.stderr}`);
-  assert.strictEqual(result.signal, null);
+  assert.strictEqual(result.aborted, false);
   assert.strictEqual(result.stderr, '');
 }
 
@@ -16,6 +16,8 @@ if (typeof spawnTest !== 'function') {
 {
   const result = spawnTest('spawn-test-fail-child.mjs');
   assert.notStrictEqual(result.status, 0, 'fail child should exit non-zero');
+  // A thrown error is a clean non-zero exit, not an abnormal termination.
+  assert.strictEqual(result.aborted, false);
   if (!result.stderr.includes('spawn-test-fail-marker')) {
     throw new Error(`Expected stderr to include the failure marker, got:\n${result.stderr}`);
   }
@@ -24,11 +26,12 @@ if (typeof spawnTest !== 'function') {
 // Result shape: all four fields are present.
 {
   const result = spawnTest('spawn-test-ok-child.mjs');
-  for (const key of ['status', 'signal', 'stdout', 'stderr']) {
+  for (const key of ['status', 'aborted', 'stdout', 'stderr']) {
     if (!(key in result)) {
       throw new Error(`Expected spawnTest result to have "${key}" field`);
     }
   }
+  assert.strictEqual(typeof result.aborted, 'boolean');
   assert.strictEqual(typeof result.stdout, 'string');
   assert.strictEqual(typeof result.stderr, 'string');
 }
