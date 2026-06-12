@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const HARNESS_MODULE_PATHS = [
   'features.js',
@@ -35,7 +36,9 @@ export const spawnTest = (filePath, options = {}) => {
   // --expose-gc is mandatory: gc.js (loaded below) throws at import without it.
   const args = ['--expose-gc'];
   for (const modulePath of HARNESS_MODULE_PATHS) {
-    args.push('--import', 'file://' + modulePath);
+    // pathToFileURL handles Windows drive letters and backslashes; a bare
+    // 'file://' + path is malformed there (e.g. file://C:\...).
+    args.push('--import', pathToFileURL(modulePath).href);
   }
   args.push(filePath);
 

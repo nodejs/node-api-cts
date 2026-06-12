@@ -38,8 +38,9 @@ export function runFileInSubprocess(cwd: string, filePath: string): void {
 
   if (status === 0) return;
 
-  const reason =
-    status !== null ? `exit code ${status}` : aborted ? 'aborted' : 'unknown';
+  const reason = aborted ?
+    'aborted' :
+    status !== null ? `exit code ${status}` : 'unknown';
   const trimmedStderr = stderr.trim();
   const stderrSuffix = trimmedStderr ?
     `\n--- stderr ---\n${trimmedStderr}\n--- end stderr ---` :
