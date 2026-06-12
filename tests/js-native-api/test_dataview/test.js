@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 // Testing api calls for dataview
-const test_dataview = loadAddon("test_dataview");
+const test_dataview = loadAddon('test_dataview');
 
 // Test for creating dataview with ArrayBuffer
 {

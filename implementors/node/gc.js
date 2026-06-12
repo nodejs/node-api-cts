@@ -1,9 +1,9 @@
 // Capture the engine-provided gc (Node exposes it under --expose-gc) before
 // we overwrite globalThis.gc with the harness wrapper below.
 const engineGc = globalThis.gc;
-if (typeof engineGc !== "function") {
+if (typeof engineGc !== 'function') {
   throw new Error(
-    "Node harness expects globalThis.gc to be available (run with --expose-gc)",
+    'Node harness expects globalThis.gc to be available (run with --expose-gc)',
   );
 }
 

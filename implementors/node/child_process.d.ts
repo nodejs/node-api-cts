@@ -11,5 +11,5 @@ export interface SpawnTestResult {
 
 export function spawnTest(
   filePath: string,
-  options?: SpawnTestOptions
+  options?: SpawnTestOptions,
 ): SpawnTestResult;

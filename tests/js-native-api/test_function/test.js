@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 // Flags: --expose-gc
 
 // Testing api calls for function
-const test_function = loadAddon("test_function");
+const test_function = loadAddon('test_function');
 
 function func1() {
   return 1;
@@ -24,8 +24,8 @@ function func4(input) {
 }
 assert.strictEqual(test_function.TestCall(func4, 1), 2);
 
-assert.strictEqual(test_function.TestName.name, "Name");
-assert.strictEqual(test_function.TestNameShort.name, "Name_");
+assert.strictEqual(test_function.TestName.name, 'Name');
+assert.strictEqual(test_function.TestNameShort.name, 'Name_');
 
 let tracked_function = test_function.MakeTrackedFunction(mustCall());
 assert(!!tracked_function);
@@ -33,13 +33,13 @@ tracked_function = null;
 gc();
 
 assert.deepStrictEqual(test_function.TestCreateFunctionParameters(), {
-  envIsNull: "Invalid argument",
-  nameIsNull: "napi_ok",
-  cbIsNull: "Invalid argument",
-  resultIsNull: "Invalid argument",
+  envIsNull: 'Invalid argument',
+  nameIsNull: 'napi_ok',
+  cbIsNull: 'Invalid argument',
+  resultIsNull: 'Invalid argument',
 });
 
 assert.throws(() => test_function.TestBadReturnExceptionPending(), {
-  code: "throwing exception",
-  name: "Error",
+  code: 'throwing exception',
+  name: 'Error',
 });

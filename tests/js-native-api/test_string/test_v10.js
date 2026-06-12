@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // Tests for Node-API version >= 10 APIs:
 // node_api_create_external_string_latin1/utf16 and
@@ -7,23 +7,23 @@ if (Number(napiVersion) < 10) {
   skipTest();
 }
 
-const test_string_v10 = loadAddon("test_string_v10");
+const test_string_v10 = loadAddon('test_string_v10');
 
 const asciiCases = [
-  "",
-  "hello world",
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+  '',
+  'hello world',
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
   "?!@#$%^&*()_+-=[]{}/.,<>'\"\\",
 ];
 
 const latin1Cases = [
   {
-    str: "¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿",
+    str: '¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿',
     utf8Length: 62,
     utf8InsufficientIdx: 1,
   },
   {
-    str: "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ",
+    str: 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþ',
     utf8Length: 126,
     utf8InsufficientIdx: 1,
   },
@@ -31,7 +31,7 @@ const latin1Cases = [
 
 const unicodeCases = [
   {
-    str: "\u{2003}\u{2101}\u{2001}\u{202}\u{2011}",
+    str: '\u{2003}\u{2101}\u{2001}\u{202}\u{2011}',
     utf8Length: 14,
     utf8InsufficientIdx: 1,
   },

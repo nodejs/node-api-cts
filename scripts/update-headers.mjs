@@ -5,26 +5,26 @@
 //
 // Usage: node scripts/update-headers.mjs [--branch <branch>]
 
-import { execFile } from "node:child_process";
-import fs from "node:fs";
-import path from "node:path";
+import { execFile } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 
-const ROOT = path.resolve(import.meta.dirname, "..");
-const INCLUDE_DIR = path.join(ROOT, "include");
-const DEF_DIR = path.join(INCLUDE_DIR, "def");
+const ROOT = path.resolve(import.meta.dirname, '..');
+const INCLUDE_DIR = path.join(ROOT, 'include');
+const DEF_DIR = path.join(INCLUDE_DIR, 'def');
 
 const HEADER_FILES = [
-  "js_native_api.h",
-  "js_native_api_types.h",
-  "node_api.h",
-  "node_api_types.h",
+  'js_native_api.h',
+  'js_native_api_types.h',
+  'node_api.h',
+  'node_api_types.h',
 ];
 
 function parseBranch() {
-  const idx = process.argv.indexOf("--branch");
-  return idx !== -1 && process.argv[idx + 1]
-    ? process.argv[idx + 1]
-    : "main";
+  const idx = process.argv.indexOf('--branch');
+  return idx !== -1 && process.argv[idx + 1] ?
+    process.argv[idx + 1] :
+    'main';
 }
 
 async function downloadHeaders(branch) {
@@ -37,7 +37,7 @@ async function downloadHeaders(branch) {
         throw new Error(`Failed to download ${url}: ${response.status}`);
       }
       return { file, content: await response.text() };
-    })
+    }),
   );
 
   fs.mkdirSync(INCLUDE_DIR, { recursive: true });
@@ -49,47 +49,47 @@ async function downloadHeaders(branch) {
 
 function detectLatestStableVersion() {
   const content = fs.readFileSync(
-    path.join(INCLUDE_DIR, "js_native_api.h"),
-    "utf8"
+    path.join(INCLUDE_DIR, 'js_native_api.h'),
+    'utf8',
   );
   const nodeApiContent = fs.readFileSync(
-    path.join(INCLUDE_DIR, "node_api.h"),
-    "utf8"
+    path.join(INCLUDE_DIR, 'node_api.h'),
+    'utf8',
   );
   const combined = content + nodeApiContent;
   const versions = [...combined.matchAll(/NAPI_VERSION >= (\d+)/g)].map(
-    (m) => Number(m[1])
+    (m) => Number(m[1]),
   );
   return Math.max(...versions);
 }
 
 function runClang(headerFile, { experimental = false, napiVersion } = {}) {
   const args = [
-    ...(experimental ? ["-D", "NAPI_EXPERIMENTAL"] : []),
-    ...(napiVersion ? ["-D", `NAPI_VERSION=${napiVersion}`] : []),
-    "-Xclang",
-    "-ast-dump=json",
-    "-fsyntax-only",
-    "-I",
+    ...(experimental ? ['-D', 'NAPI_EXPERIMENTAL'] : []),
+    ...(napiVersion ? ['-D', `NAPI_VERSION=${napiVersion}`] : []),
+    '-Xclang',
+    '-ast-dump=json',
+    '-fsyntax-only',
+    '-I',
     INCLUDE_DIR,
     path.join(INCLUDE_DIR, headerFile),
   ];
   return new Promise((resolve, reject) => {
     execFile(
-      "clang",
+      'clang',
       args,
       { maxBuffer: 10 * 1024 * 1024 },
       (error, stdout, stderr) => {
         if (error) {
           reject(
             new Error(
-              `clang failed on ${headerFile}: ${error.message}\n${stderr}`
-            )
+              `clang failed on ${headerFile}: ${error.message}\n${stderr}`,
+            ),
           );
           return;
         }
         resolve(stdout);
-      }
+      },
     );
   });
 }
@@ -98,20 +98,20 @@ function extractSymbols(astJson) {
   const ast = JSON.parse(astJson);
   return new Set(
     ast.inner
-      .filter((node) => node.kind === "FunctionDecl")
-      .map((node) => node.name)
+      .filter((node) => node.kind === 'FunctionDecl')
+      .map((node) => node.name),
   );
 }
 
 function generateDef(symbols) {
-  return [...symbols].sort().join("\n") + "\n";
+  return [...symbols].sort().join('\n') + '\n';
 }
 
 function writeDef(filename, symbols) {
   const defPath = path.join(DEF_DIR, filename);
   fs.writeFileSync(defPath, generateDef(symbols));
   console.log(
-    `Generated ${path.relative(ROOT, defPath)} (${symbols.size} symbols)`
+    `Generated ${path.relative(ROOT, defPath)} (${symbols.size} symbols)`,
   );
 }
 
@@ -121,10 +121,10 @@ async function generateDefFiles() {
 
   const [jsNativeApiAst, nodeApiAst, jsNativeApiExpAst, nodeApiExpAst] =
     await Promise.all([
-      runClang("js_native_api.h", { napiVersion: latestVersion }),
-      runClang("node_api.h", { napiVersion: latestVersion }),
-      runClang("js_native_api.h", { experimental: true }),
-      runClang("node_api.h", { experimental: true }),
+      runClang('js_native_api.h', { napiVersion: latestVersion }),
+      runClang('node_api.h', { napiVersion: latestVersion }),
+      runClang('js_native_api.h', { experimental: true }),
+      runClang('node_api.h', { experimental: true }),
     ]);
 
   const jsNativeApiStable = extractSymbols(jsNativeApiAst);
@@ -139,15 +139,15 @@ async function generateDefFiles() {
 
   fs.mkdirSync(DEF_DIR, { recursive: true });
 
-  writeDef("js_native_api.def", jsNativeApiStable);
-  writeDef("node_api.def", nodeApiStable);
-  writeDef("js_native_api_experimental.def", jsNativeApiExp);
-  writeDef("node_api_experimental.def", nodeApiExp);
+  writeDef('js_native_api.def', jsNativeApiStable);
+  writeDef('node_api.def', nodeApiStable);
+  writeDef('js_native_api_experimental.def', jsNativeApiExp);
+  writeDef('node_api_experimental.def', nodeApiExp);
 }
 
 const branch = parseBranch();
 console.log(`Downloading headers from nodejs/node@${branch}...`);
 await downloadHeaders(branch);
-console.log("\nGenerating .def files via clang...");
+console.log('\nGenerating .def files via clang...');
 await generateDefFiles();
-console.log("\nDone.");
+console.log('\nDone.');

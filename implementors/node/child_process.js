@@ -1,15 +1,15 @@
-import { spawnSync } from "node:child_process";
-import path from "node:path";
+import { spawnSync } from 'node:child_process';
+import path from 'node:path';
 
 const HARNESS_MODULE_PATHS = [
-  "features.js",
-  "assert.js",
-  "load-addon.js",
-  "gc.js",
-  "must-call.js",
-  "skip-test.js",
-  "napi-version.js",
-  "child_process.js",
+  'features.js',
+  'assert.js',
+  'load-addon.js',
+  'gc.js',
+  'must-call.js',
+  'skip-test.js',
+  'napi-version.js',
+  'child_process.js',
 ].map((file) => path.join(import.meta.dirname, file));
 
 /**
@@ -24,9 +24,9 @@ const HARNESS_MODULE_PATHS = [
  */
 export const spawnTest = (filePath, options = {}) => {
   // --expose-gc is mandatory: gc.js (loaded below) throws at import without it.
-  const args = ["--expose-gc"];
+  const args = ['--expose-gc'];
   for (const modulePath of HARNESS_MODULE_PATHS) {
-    args.push("--import", "file://" + modulePath);
+    args.push('--import', 'file://' + modulePath);
   }
   args.push(filePath);
 
@@ -38,8 +38,8 @@ export const spawnTest = (filePath, options = {}) => {
   return {
     status: result.status,
     signal: result.signal,
-    stderr: result.stderr?.toString() ?? "",
-    stdout: result.stdout?.toString() ?? "",
+    stderr: result.stderr?.toString() ?? '',
+    stdout: result.stdout?.toString() ?? '',
   };
 };
 
