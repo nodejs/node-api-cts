@@ -10,11 +10,11 @@ assert(
 
 const ROOT_PATH = path.resolve(import.meta.dirname, '..', '..');
 const TESTS_ROOT_PATH = path.join(ROOT_PATH, 'tests');
-const GLOBALS_MODULE_PATH = path.join(
+const HARNESS_MODULE_PATH = path.join(
   ROOT_PATH,
   'implementors',
   'node',
-  'globals.js',
+  'harness.js',
 );
 
 export function listDirectoryEntries(dir: string) {
@@ -47,7 +47,7 @@ export function runFileInSubprocess(
         // Using file scheme prefix when to enable imports on Windows
         '--expose-gc',
         '--import',
-        'file://' + GLOBALS_MODULE_PATH,
+        'file://' + HARNESS_MODULE_PATH,
         filePath,
       ],
       { cwd },
