@@ -35,6 +35,12 @@ const MUST_CALL_MODULE_PATH = path.join(
   'node',
   'must-call.js',
 );
+const ON_UNCAUGHT_EXCEPTION_MODULE_PATH = path.join(
+  ROOT_PATH,
+  'implementors',
+  'node',
+  'on-uncaught-exception.js',
+);
 const SKIP_TEST_MODULE_PATH = path.join(
   ROOT_PATH,
   'implementors',
@@ -87,6 +93,8 @@ export function runFileInSubprocess(
         'file://' + GC_MODULE_PATH,
         '--import',
         'file://' + MUST_CALL_MODULE_PATH,
+        '--import',
+        'file://' + ON_UNCAUGHT_EXCEPTION_MODULE_PATH,
         '--import',
         'file://' + SKIP_TEST_MODULE_PATH,
         '--import',
