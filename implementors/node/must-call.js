@@ -13,7 +13,7 @@ const mustCall = (fn, exact = 1) => {
   const entry = {
     exact,
     actual: 0,
-    name: fn?.name || "<anonymous>",
+    name: fn?.name || '<anonymous>',
     error: new Error(), // capture call-site stack
   };
   pendingCalls.push(entry);
@@ -28,11 +28,11 @@ const mustCall = (fn, exact = 1) => {
  */
 const mustNotCall = (msg) => {
   return () => {
-    throw new Error(msg || "mustNotCall function was called");
+    throw new Error(msg || 'mustNotCall function was called');
   };
 };
 
-process.on("exit", () => {
+process.on('exit', () => {
   for (const entry of pendingCalls) {
     if (entry.actual !== entry.exact) {
       entry.error.message =

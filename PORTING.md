@@ -52,12 +52,12 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `test_cannot_run_js`         | Not ported | Medium     |
 | `test_constructor`           | Ported ✅  | Medium     |
 | `test_conversions`           | Ported ✅  | Medium     |
-| `test_dataview`              | Not ported | Medium     |
+| `test_dataview`              | Ported ✅  | Medium     |
 | `test_date`                  | Ported ✅  | Easy       |
 | `test_error`                 | Ported ✅  | Medium     |
 | `test_exception`             | Not ported | Medium     |
 | `test_finalizer`             | Not ported | Medium     |
-| `test_function`              | Not ported | Medium     |
+| `test_function`              | Ported ✅  | Medium     |
 | `test_general`               | Not ported | Hard       |
 | `test_handle_scope`          | Ported ✅  | Easy       |
 | `test_instance_data`         | Not ported | Medium     |
@@ -68,7 +68,7 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `test_properties`            | Ported ✅  | Easy       |
 | `test_reference`             | Not ported | Medium     |
 | `test_reference_double_free` | Ported ✅  | Easy       |
-| `test_sharedarraybuffer`     | Not ported | Medium     |
+| `test_sharedarraybuffer`     | Ported ✅  | Medium     |
 | `test_string`                | Ported ✅  | Medium     |
 | `test_symbol`                | Ported ✅  | Easy       |
 | `test_typedarray`            | Ported ✅  | Medium     |
