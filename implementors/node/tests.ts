@@ -10,48 +10,11 @@ assert(
 
 const ROOT_PATH = path.resolve(import.meta.dirname, '..', '..');
 const TESTS_ROOT_PATH = path.join(ROOT_PATH, 'tests');
-const FEATURES_MODULE_PATH = path.join(
+const HARNESS_MODULE_PATH = path.join(
   ROOT_PATH,
   'implementors',
   'node',
-  'features.js',
-);
-const ASSERT_MODULE_PATH = path.join(
-  ROOT_PATH,
-  'implementors',
-  'node',
-  'assert.js',
-);
-const LOAD_ADDON_MODULE_PATH = path.join(
-  ROOT_PATH,
-  'implementors',
-  'node',
-  'load-addon.js',
-);
-const GC_MODULE_PATH = path.join(ROOT_PATH, 'implementors', 'node', 'gc.js');
-const MUST_CALL_MODULE_PATH = path.join(
-  ROOT_PATH,
-  'implementors',
-  'node',
-  'must-call.js',
-);
-const ON_UNCAUGHT_EXCEPTION_MODULE_PATH = path.join(
-  ROOT_PATH,
-  'implementors',
-  'node',
-  'on-uncaught-exception.js',
-);
-const SKIP_TEST_MODULE_PATH = path.join(
-  ROOT_PATH,
-  'implementors',
-  'node',
-  'skip-test.js',
-);
-const NAPI_VERSION_MODULE_PATH = path.join(
-  ROOT_PATH,
-  'implementors',
-  'node',
-  'napi-version.js',
+  'harness.js',
 );
 
 export function listDirectoryEntries(dir: string) {
@@ -84,21 +47,7 @@ export function runFileInSubprocess(
         // Using file scheme prefix when to enable imports on Windows
         '--expose-gc',
         '--import',
-        'file://' + FEATURES_MODULE_PATH,
-        '--import',
-        'file://' + ASSERT_MODULE_PATH,
-        '--import',
-        'file://' + LOAD_ADDON_MODULE_PATH,
-        '--import',
-        'file://' + GC_MODULE_PATH,
-        '--import',
-        'file://' + MUST_CALL_MODULE_PATH,
-        '--import',
-        'file://' + ON_UNCAUGHT_EXCEPTION_MODULE_PATH,
-        '--import',
-        'file://' + SKIP_TEST_MODULE_PATH,
-        '--import',
-        'file://' + NAPI_VERSION_MODULE_PATH,
+        'file://' + HARNESS_MODULE_PATH,
         filePath,
       ],
       { cwd },
