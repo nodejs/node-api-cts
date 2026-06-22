@@ -2,16 +2,10 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const HARNESS_MODULE_PATHS = [
-  'features.js',
-  'assert.js',
-  'load-addon.js',
-  'gc.js',
-  'must-call.js',
-  'skip-test.js',
-  'napi-version.js',
-  'child_process.js',
-].map((file) => path.join(import.meta.dirname, file));
+// A single module that imports every harness global (including this one, so
+// spawned children can recursively call spawnTest). Consolidating the harness
+// into one --import keeps the child's command line short.
+const HARNESS_MODULE_PATH = path.join(import.meta.dirname, 'harness.js');
 
 // Exit codes that signify the runtime aborted (rather than exiting cleanly with
 // a non-zero status). On POSIX an abort surfaces as a fatal signal; on Windows
@@ -33,14 +27,16 @@ const ABORT_EXIT_CODES = [132, 133, 134, 139, 0xc0000409, 0xc000001d];
  * @returns {{ status: number | null, aborted: boolean, stdout: string, stderr: string }}
  */
 export const spawnTest = (filePath, options = {}) => {
-  // --expose-gc is mandatory: gc.js (loaded below) throws at import without it.
-  const args = ['--expose-gc'];
-  for (const modulePath of HARNESS_MODULE_PATHS) {
-    // pathToFileURL handles Windows drive letters and backslashes; a bare
-    // 'file://' + path is malformed there (e.g. file://C:\...).
-    args.push('--import', pathToFileURL(modulePath).href);
-  }
-  args.push(filePath);
+  // --expose-gc is mandatory: gc.js (loaded via harness.js) throws at import
+  // without it.
+  // pathToFileURL handles Windows drive letters and backslashes; a bare
+  // 'file://' + path is malformed there (e.g. file://C:\...).
+  const args = [
+    '--expose-gc',
+    '--import',
+    pathToFileURL(HARNESS_MODULE_PATH).href,
+    filePath,
+  ];
 
   const result = spawnSync(process.execPath, args, {
     cwd: options.cwd ?? process.cwd(),
