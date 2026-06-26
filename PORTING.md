@@ -56,7 +56,7 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `test_date`                  | Ported ✅  | Easy       |
 | `test_error`                 | Ported ✅  | Medium     |
 | `test_exception`             | Not ported | Medium     |
-| `test_finalizer`             | Not ported | Medium     |
+| `test_finalizer`             | Ported ✅  | Medium     |
 | `test_function`              | Ported ✅  | Medium     |
 | `test_general`               | Not ported | Hard       |
 | `test_handle_scope`          | Ported ✅  | Easy       |
