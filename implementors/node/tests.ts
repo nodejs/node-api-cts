@@ -32,9 +32,13 @@ export function listDirectoryEntries(dir: string) {
 }
 
 export function runFileInSubprocess(cwd: string, filePath: string): void {
-  const { status, aborted, stdout, stderr } = spawnTest(filePath, { cwd });
-
-  if (stdout) process.stdout.write(stdout);
+  // Stream stdout live rather than buffering it, so output from a slow or
+  // hanging test shows up immediately. stderr is still captured to attach to
+  // the failure message below.
+  const { status, aborted, stderr } = spawnTest(filePath, {
+    cwd,
+    stdout: 'inherit',
+  });
 
   if (status === 0) return;
 

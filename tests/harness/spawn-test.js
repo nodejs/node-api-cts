@@ -49,6 +49,18 @@ if (typeof spawnTest !== 'function') {
   assert.strictEqual(typeof result.stderr, 'string');
 }
 
+// stdout: 'inherit' streams the child's stdout straight to the terminal as it
+// runs (so a slow or hanging test's output is visible immediately) instead of
+// buffering it. The streamed output bypasses the result, so captured stdout is
+// empty; the child still runs to a clean exit. (Asserting that the stream
+// actually reached the terminal would need the child to write to stdout, which
+// isn't expressible in portable ECMAScript, so we only check the contract here.)
+{
+  const result = spawnTest('spawn-test-ok-child.mjs', { stdout: 'inherit' });
+  assert.strictEqual(result.status, 0, `ok child exited with status ${result.status}; stderr:\n${result.stderr}`);
+  assert.strictEqual(result.stdout, '', 'inherited stdout should not be captured');
+}
+
 // cwd is forwarded to the child: running from the parent of tests/harness
 // makes the bare child filename unresolvable. The child's stderr must name
 // the specific file Node tried to load, proving cwd actually shifted.

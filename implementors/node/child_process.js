@@ -22,8 +22,12 @@ const ABORT_EXIT_CODES = [132, 133, 134, 139, 0xc0000409, 0xc000001d];
  *
  * @param {string} filePath - Path to the JS/MJS file to execute. Resolved
  *   against `options.cwd` if relative.
- * @param {{ cwd?: string }} [options]
+ * @param {{ cwd?: string, stdout?: 'pipe' | 'inherit' }} [options]
  *   - `cwd`: working directory for the child; defaults to `process.cwd()`.
+ *   - `stdout`: `'pipe'` (default) captures the child's stdout into the result;
+ *     `'inherit'` streams it straight to the terminal as the child runs (so the
+ *     output of a slow or hanging test is visible immediately) and leaves the
+ *     returned `stdout` empty. stderr is always captured for diagnostics.
  * @returns {{ status: number | null, aborted: boolean, stdout: string, stderr: string }}
  */
 export const spawnTest = (filePath, options = {}) => {
@@ -41,6 +45,7 @@ export const spawnTest = (filePath, options = {}) => {
   const result = spawnSync(process.execPath, args, {
     cwd: options.cwd ?? process.cwd(),
     maxBuffer: 100 * 1024 * 1024,
+    stdio: ['ignore', options.stdout ?? 'pipe', 'pipe'],
   });
   if (result.error) throw result.error;
   return {

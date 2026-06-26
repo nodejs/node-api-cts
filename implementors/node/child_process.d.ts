@@ -1,5 +1,6 @@
 export interface SpawnTestOptions {
   cwd?: string;
+  stdout?: 'pipe' | 'inherit';
 }
 
 export interface SpawnTestResult {
