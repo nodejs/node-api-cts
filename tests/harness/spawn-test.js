@@ -1,3 +1,16 @@
+// Spawning subprocesses is an optional harness capability. Runtimes that can't
+// spawn (e.g. WASM, React Native) declare runtimeFeatures.spawn = false and need
+// not provide a spawnTest implementation; this whole spawn-only test is then
+// skipped.
+assert.strictEqual(
+  typeof runtimeFeatures.spawn,
+  'boolean',
+  'Expected runtimeFeatures.spawn to be a boolean',
+);
+if (!runtimeFeatures.spawn) {
+  skipTest();
+}
+
 // spawnTest is a function
 if (typeof spawnTest !== 'function') {
   throw new Error('Expected a global spawnTest function');
