@@ -1,6 +1,13 @@
+if (typeof gc !== 'function') {
+  throw new Error('Expected a global gc function');
+}
+
 if (typeof gcUntil !== 'function') {
   throw new Error('Expected a global gcUntil function');
 }
+
+// gc should run synchronously without throwing
+gc();
 
 // gcUntil should resolve once the condition becomes true
 let count = 0;
