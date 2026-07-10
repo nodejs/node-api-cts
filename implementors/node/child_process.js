@@ -1,4 +1,4 @@
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -28,7 +28,7 @@ const ABORT_EXIT_CODES = [132, 133, 134, 139, 0xc0000409, 0xc000001d];
  *     `'inherit'` streams it straight to the terminal as the child runs (so the
  *     output of a slow or hanging test is visible immediately) and leaves the
  *     returned `stdout` empty. stderr is always captured for diagnostics.
- * @returns {{ status: number | null, aborted: boolean, stdout: string, stderr: string }}
+ * @returns {Promise<{ status: number | null, aborted: boolean, stdout: string, stderr: string }>}
  */
 export const spawnTest = (filePath, options = {}) => {
   // --expose-gc is mandatory: gc.js (loaded via harness.js) throws at import
@@ -42,18 +42,35 @@ export const spawnTest = (filePath, options = {}) => {
     filePath,
   ];
 
-  const result = spawnSync(process.execPath, args, {
+  // spawn (not spawnSync) so a hung child doesn't block the event loop and the
+  // test runner can still enforce its per-test timeout.
+  const child = spawn(process.execPath, args, {
     cwd: options.cwd ?? process.cwd(),
-    maxBuffer: 100 * 1024 * 1024,
     stdio: ['ignore', options.stdout ?? 'pipe', 'pipe'],
   });
-  if (result.error) throw result.error;
-  return {
-    status: result.status,
-    aborted: result.signal !== null || ABORT_EXIT_CODES.includes(result.status),
-    stderr: result.stderr?.toString() ?? '',
-    stdout: result.stdout?.toString() ?? '',
-  };
+
+  return new Promise((resolve, reject) => {
+    let stdout = '';
+    let stderr = '';
+    // child.stdout is null when stdout is 'inherit' (streamed to the terminal).
+    child.stdout?.setEncoding('utf8').on('data', (chunk) => {
+      stdout += chunk;
+    });
+    child.stderr.setEncoding('utf8').on('data', (chunk) => {
+      stderr += chunk;
+    });
+    child.on('error', reject);
+    // 'close' (not 'exit') fires once the stdio streams have drained, so stdout
+    // and stderr are complete.
+    child.on('close', (status, signal) => {
+      resolve({
+        status,
+        aborted: signal !== null || ABORT_EXIT_CODES.includes(status),
+        stderr,
+        stdout,
+      });
+    });
+  });
 };
 
 // This module is loaded in both contexts: imported by the parent test runner

@@ -31,20 +31,23 @@ export function listDirectoryEntries(dir: string) {
   return { directories, files };
 }
 
-export function runFileInSubprocess(cwd: string, filePath: string): void {
+export async function runFileInSubprocess(
+  cwd: string,
+  filePath: string,
+): Promise<void> {
   // Stream stdout live rather than buffering it, so output from a slow or
   // hanging test shows up immediately. stderr is still captured to attach to
   // the failure message below.
-  const { status, aborted, stderr } = spawnTest(filePath, {
+  const { status, aborted, stderr } = await spawnTest(filePath, {
     cwd,
     stdout: 'inherit',
   });
 
   if (status === 0) return;
 
-  const reason = aborted ?
-    'aborted' :
-    status !== null ? `exit code ${status}` : 'unknown';
+  // A null status means the child was killed by a signal, which already sets
+  // `aborted`, so the non-aborted branch always has a numeric exit code.
+  const reason = aborted ? 'aborted' : `exit code ${status}`;
   const trimmedStderr = stderr.trim();
   const stderrSuffix = trimmedStderr ?
     `\n--- stderr ---\n${trimmedStderr}\n--- end stderr ---` :
