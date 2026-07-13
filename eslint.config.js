@@ -87,7 +87,7 @@ export default defineConfig([
   },
   {
     files: [
-      'tests/**/*.js',
+      'tests/**/*.{mjs,js}',
     ],
     languageOptions: {
       // Only allow ECMAScript built-ins and CTS harness globals.
@@ -101,6 +101,7 @@ export default defineConfig([
         mustNotCall: 'readonly',
         gc: 'readonly',
         gcUntil: 'readonly',
+        spawnTest: 'readonly',
         experimentalFeatures: 'readonly',
         runtimeFeatures: 'readonly',
         onUncaughtException: 'readonly',

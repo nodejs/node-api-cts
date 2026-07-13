@@ -1,7 +1,8 @@
 import assert from 'node:assert';
-import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+
+import { spawnTest } from './child_process.js';
 
 assert(
   typeof import.meta.dirname === 'string',
@@ -10,12 +11,6 @@ assert(
 
 const ROOT_PATH = path.resolve(import.meta.dirname, '..', '..');
 const TESTS_ROOT_PATH = path.join(ROOT_PATH, 'tests');
-const HARNESS_MODULE_PATH = path.join(
-  ROOT_PATH,
-  'implementors',
-  'node',
-  'harness.js',
-);
 
 export function listDirectoryEntries(dir: string) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -36,53 +31,31 @@ export function listDirectoryEntries(dir: string) {
   return { directories, files };
 }
 
-export function runFileInSubprocess(
+export async function runFileInSubprocess(
   cwd: string,
   filePath: string,
 ): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const child = spawn(
-      process.execPath,
-      [
-        // Using file scheme prefix when to enable imports on Windows
-        '--expose-gc',
-        '--import',
-        'file://' + HARNESS_MODULE_PATH,
-        filePath,
-      ],
-      { cwd },
-    );
-
-    let stderrOutput = '';
-    child.stderr.setEncoding('utf8');
-    child.stderr.on('data', (chunk) => {
-      stderrOutput += chunk;
-    });
-
-    child.stdout.pipe(process.stdout);
-
-    child.on('error', reject);
-
-    child.on('close', (code, signal) => {
-      if (code === 0) {
-        resolve();
-        return;
-      }
-
-      const reason =
-        code !== null ? `exit code ${code}` : `signal ${signal ?? 'unknown'}`;
-      const trimmedStderr = stderrOutput.trim();
-      const stderrSuffix = trimmedStderr ?
-        `\n--- stderr ---\n${trimmedStderr}\n--- end stderr ---` :
-        '';
-      reject(
-        new Error(
-          `Test file ${path.relative(
-            TESTS_ROOT_PATH,
-            filePath,
-          )} failed (${reason})${stderrSuffix}`,
-        ),
-      );
-    });
+  // Stream stdout live rather than buffering it, so output from a slow or
+  // hanging test shows up immediately. stderr is still captured to attach to
+  // the failure message below.
+  const { status, aborted, stderr } = await spawnTest(filePath, {
+    cwd,
+    stdout: 'inherit',
   });
+
+  if (status === 0) return;
+
+  // A null status means the child was killed by a signal, which already sets
+  // `aborted`, so the non-aborted branch always has a numeric exit code.
+  const reason = aborted ? 'aborted' : `exit code ${status}`;
+  const trimmedStderr = stderr.trim();
+  const stderrSuffix = trimmedStderr ?
+    `\n--- stderr ---\n${trimmedStderr}\n--- end stderr ---` :
+    '';
+  throw new Error(
+    `Test file ${path.relative(
+      TESTS_ROOT_PATH,
+      path.join(cwd, filePath),
+    )} failed (${reason})${stderrSuffix}`,
+  );
 }

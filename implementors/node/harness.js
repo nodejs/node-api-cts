@@ -6,3 +6,4 @@ import './must-call.js';
 import './on-uncaught-exception.js';
 import './skip-test.js';
 import './napi-version.js';
+import './child_process.js';

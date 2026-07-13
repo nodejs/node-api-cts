@@ -15,8 +15,15 @@ globalThis.experimentalFeatures = {
   postFinalizer: true,
 };
 
-// Version-dependent behaviors of stable (non-experimental) Node-API.
+// Version-dependent behaviors of stable Node-API, plus harness/runtime
+// capabilities that aren't tied to Node-API at all (e.g. whether the runtime
+// can spawn subprocesses). Implementors that lack a capability set it to false.
 globalThis.runtimeFeatures = {
+  // Node.js can spawn isolated subprocesses, so the spawnTest global is
+  // available. Runtimes that can't (e.g. WASM, React Native) set this to false
+  // and need not provide a spawnTest implementation.
+  spawn: true,
+
   // napi_create_dataview accepts a SharedArrayBuffer-backed buffer only since
   // Node.js v24.13.1 and v25.4.0 (nodejs/node#60473). It was not backported to
   // v20.x or v22.x, where such calls fail with "invalid argument".
