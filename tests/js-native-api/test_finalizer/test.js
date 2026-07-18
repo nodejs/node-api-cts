@@ -7,8 +7,6 @@ if (!experimentalFeatures.postFinalizer) {
 
 const test_finalizer = loadAddon('test_finalizer');
 
-// The original asserts the finalizer runs in the same tick as GC; the harness
-// only exposes async gcUntil, so we settle for observing that it fires.
 {
   (() => {
     const obj = {};
