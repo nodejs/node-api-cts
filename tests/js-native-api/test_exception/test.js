@@ -1,5 +1,4 @@
 'use strict';
-// Flags: --expose-gc
 
 const theError = new Error('Some error');
 
