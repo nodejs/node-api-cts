@@ -13,14 +13,13 @@ const binding = (function() {
   return resultingException.binding;
 })();
 
+let finalized = false;
 onUncaughtException(mustCall((err) => {
   assert.match(err.message, /Error during Finalize/);
+  finalized = true;
 }));
 
 (async function() {
   binding.createExternal();
-
-  // GC until the finalizer fires; the counter just bounds the loop.
-  let gcCount = 10;
-  await gcUntil('test', () => --gcCount <= 0);
+  await gcUntil('finalizer throws', () => finalized);
 })().then(mustCall());
