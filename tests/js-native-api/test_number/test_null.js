@@ -1,4 +1,3 @@
-'use strict';
 const { testNull } = loadAddon('test_number');
 
 const expectedCreateResult = {

@@ -1,4 +1,3 @@
-'use strict';
 const test = loadAddon('test_conversions');
 
 const boolExpected = /boolean was expected/;

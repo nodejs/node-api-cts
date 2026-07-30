@@ -1,4 +1,3 @@
-'use strict';
 const binding = loadAddon('test_new_target');
 
 class Class extends binding.BaseClass {

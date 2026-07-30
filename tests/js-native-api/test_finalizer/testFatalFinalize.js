@@ -1,5 +1,3 @@
-'use strict';
-
 // A fatal finalizer aborts the process, so it runs in a spawned child
 // (testFatalFinalize_child.mjs) rather than tearing down the test runner.
 // Needs the postFinalizer API and the ability to spawn.
