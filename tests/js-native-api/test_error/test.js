@@ -1,5 +1,3 @@
-'use strict';
-
 const test_error = loadAddon('test_error');
 const theError = new Error('Some error');
 const theTypeError = new TypeError('Some type error');

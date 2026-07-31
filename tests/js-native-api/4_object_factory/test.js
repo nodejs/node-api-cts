@@ -1,4 +1,3 @@
-'use strict';
 const addon = loadAddon('4_object_factory');
 
 const obj1 = addon('hello');

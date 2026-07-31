@@ -1,4 +1,3 @@
-'use strict';
 const readonlyErrorRE =
   /^TypeError: Cannot assign to read only property '.*' of object '#<Object>'$/;
 const getterOnlyErrorRE =

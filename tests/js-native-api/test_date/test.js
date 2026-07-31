@@ -1,4 +1,3 @@
-'use strict';
 const test_date = loadAddon('test_date');
 
 const dateTypeTestDate = test_date.createDate(1549183351);

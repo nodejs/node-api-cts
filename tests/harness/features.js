@@ -1,5 +1,3 @@
-'use strict';
-
 assert.ok(
   typeof experimentalFeatures === 'object' && experimentalFeatures !== null,
   'Expected a global experimentalFeatures object',

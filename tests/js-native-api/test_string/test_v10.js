@@ -1,5 +1,3 @@
-'use strict';
-
 // Tests for Node-API version >= 10 APIs:
 // node_api_create_external_string_latin1/utf16 and
 // node_api_create_property_key_latin1/utf8/utf16.

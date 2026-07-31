@@ -1,4 +1,3 @@
-'use strict';
 const {
   IsLossless,
   TestInt64,

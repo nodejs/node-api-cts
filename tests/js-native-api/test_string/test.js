@@ -1,5 +1,3 @@
-'use strict';
-
 // Testing api calls for string
 const test_string = loadAddon('test_string');
 // The insufficient buffer test case allocates a buffer of size 4, including
