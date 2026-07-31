@@ -24,6 +24,13 @@ globalThis.runtimeFeatures = {
   // and need not provide a spawnTest implementation.
   spawn: true,
 
+  // Node.js can run a test file in a worker thread, giving it a secondary
+  // Node-API environment, so spawnTest accepts `{ worker: true }`. Declared
+  // separately from `spawn` because the two capabilities are independent: a
+  // browser has workers but no subprocesses. Runtimes with neither set both to
+  // false.
+  worker: true,
+
   // napi_create_dataview accepts a SharedArrayBuffer-backed buffer only since
   // Node.js v24.13.1 and v25.4.0 (nodejs/node#60473). It was not backported to
   // v20.x or v22.x, where such calls fail with "invalid argument".

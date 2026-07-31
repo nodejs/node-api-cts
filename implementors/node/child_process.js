@@ -7,6 +7,10 @@ import { pathToFileURL } from 'node:url';
 // into one --import keeps the child's command line short.
 const HARNESS_MODULE_PATH = path.join(import.meta.dirname, 'harness.js');
 
+// Entry point used for `worker: true`: it takes the test file as an argument
+// and runs it on a worker thread of the child rather than on its main thread.
+const WORKER_ENTRY_PATH = path.join(import.meta.dirname, 'worker-entry.js');
+
 // Exit codes that signify the runtime aborted (rather than exiting cleanly with
 // a non-zero status). On POSIX an abort surfaces as a fatal signal; on Windows
 // as one of a small set of exit codes. Mirrors Node.js's
@@ -22,12 +26,19 @@ const ABORT_EXIT_CODES = [132, 133, 134, 139, 0xc0000409, 0xc000001d];
  *
  * @param {string} filePath - Path to the JS/MJS file to execute. Resolved
  *   against `options.cwd` if relative.
- * @param {{ cwd?: string, stdout?: 'pipe' | 'inherit' }} [options]
+ * @param {{ cwd?: string, stdout?: 'pipe' | 'inherit', worker?: boolean }} [options]
  *   - `cwd`: working directory for the child; defaults to `process.cwd()`.
  *   - `stdout`: `'pipe'` (default) captures the child's stdout into the result;
  *     `'inherit'` streams it straight to the terminal as the child runs (so the
  *     output of a slow or hanging test is visible immediately) and leaves the
  *     returned `stdout` empty. stderr is always captured for diagnostics.
+ *   - `worker`: run the file in a worker thread of the child instead of on its
+ *     main thread, giving it a secondary Node-API environment. The result still
+ *     describes the host process, which is the point: native output from the
+ *     worker's environment (a printf from a finalizer or an instance-data delete
+ *     hook) goes to the process's stdout, not to the worker's JS-level stream.
+ *     Gate such a test in the parent file: `skipTest()` inside a worker ends
+ *     that thread with code 0, which the caller cannot tell from a pass.
  * @returns {Promise<{ status: number | null, aborted: boolean, stdout: string, stderr: string }>}
  */
 export const spawnTest = (filePath, options = {}) => {
@@ -35,11 +46,13 @@ export const spawnTest = (filePath, options = {}) => {
   // without it.
   // pathToFileURL handles Windows drive letters and backslashes; a bare
   // 'file://' + path is malformed there (e.g. file://C:\...).
+  // In worker mode the child runs worker-entry.js, which takes the test file as
+  // its argument and starts it on a worker thread.
   const args = [
     '--expose-gc',
     '--import',
     pathToFileURL(HARNESS_MODULE_PATH).href,
-    filePath,
+    ...(options.worker ? [WORKER_ENTRY_PATH, filePath] : [filePath]),
   ];
 
   // spawn (not spawnSync) so a hung child doesn't block the event loop and the
