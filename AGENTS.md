@@ -1,4 +1,4 @@
-# Copilot Instructions for node-api-cts
+# node-api-cts
 
 ## Project Overview
 
@@ -13,6 +13,20 @@ Node-API Conformance Test Suite: A pure ECMAScript test suite for Node-API imple
 - **Process Isolation**: The built-in runner for Node.js, run each test in isolation to prevent crashes from aborting entire test suite.
 
 ## Development Focus
-- Port existing tests from `nodejs/node/test/js-native-api` into `tests/engine/` and `nodejs/node/test/node-api` into `tests/runtime/`, removing dependencies on Node.js runtime APIs while preserving test coverage
+- Port existing tests from `nodejs/node/test/js-native-api` into `tests/js-native-api/` and `nodejs/node/test/node-api` into `tests/node-api/`, removing dependencies on Node.js runtime APIs while preserving test coverage
 - Structure tests for easy integration by external implementors
 - Consider following patterns from [web-platform-tests](https://web-platform-tests.org/) and [WebGPU CTS](https://github.com/gpuweb/cts) projects where applicable.
+
+## Building and Running the Tests
+
+Building the addons needs CMake and a C/C++ toolchain on the `PATH`, alongside Node.js.
+
+```sh
+npm ci
+npm run addons:configure  # cmake -S . -B ./build
+npm run addons:build      # cmake --build ./build
+npm run node:test         # run the suite through the Node.js implementor
+npm run lint              # eslint && tsc
+```
+
+Rebuild the addons after touching any C file. `npm run addons:clean` removes the build directory along with the built `.node` files.
