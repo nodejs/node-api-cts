@@ -1,1 +1,2 @@
 add_node_api_cts_addon(test_typedarray test_typedarray.c)
+add_node_api_cts_addon(test_typedarray_sharedarraybuffer test_typedarray_sharedarraybuffer.c)
