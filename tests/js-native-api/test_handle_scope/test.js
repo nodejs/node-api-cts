@@ -1,4 +1,3 @@
-'use strict';
 const testHandleScope = loadAddon('test_handle_scope');
 
 testHandleScope.NewScope();

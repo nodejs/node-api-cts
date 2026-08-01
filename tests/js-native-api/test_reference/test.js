@@ -1,5 +1,3 @@
-'use strict';
-
 const test_reference = loadAddon('test_reference');
 
 // This test script uses external values with finalizer callbacks

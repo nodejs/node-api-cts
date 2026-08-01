@@ -1,5 +1,3 @@
-'use strict';
-
 // node_api_post_finalizer and node_api_basic_env are both experimental.
 if (!experimentalFeatures.postFinalizer) {
   skipTest();

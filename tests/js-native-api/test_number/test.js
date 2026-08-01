@@ -1,4 +1,3 @@
-'use strict';
 const test_number = loadAddon('test_number');
 
 // Testing api calls for number

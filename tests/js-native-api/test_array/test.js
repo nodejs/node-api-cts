@@ -1,4 +1,3 @@
-'use strict';
 const test_array = loadAddon('test_array');
 
 const array = [

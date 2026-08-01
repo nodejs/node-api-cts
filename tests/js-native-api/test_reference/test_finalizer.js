@@ -1,4 +1,3 @@
-'use strict';
 // Flags: --expose-gc --force-node-api-uncaught-exceptions-policy
 
 const binding = loadAddon('test_finalizer');

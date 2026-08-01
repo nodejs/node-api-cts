@@ -1,4 +1,3 @@
-'use strict';
 const test = loadAddon('7_factory_wrap');
 
 assert.strictEqual(test.finalizeCount, 0);

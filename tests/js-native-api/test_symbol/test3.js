@@ -1,4 +1,3 @@
-'use strict';
 const test_symbol = loadAddon('test_symbol');
 
 assert.notStrictEqual(test_symbol.New(), test_symbol.New());

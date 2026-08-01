@@ -1,4 +1,3 @@
-'use strict';
 const addon = loadAddon('8_passing_wrapped');
 
 let obj1 = addon.createObject(10);

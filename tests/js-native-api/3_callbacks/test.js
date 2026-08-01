@@ -1,4 +1,3 @@
-'use strict';
 const addon = loadAddon('3_callbacks');
 
 addon.RunCallback(mustCall((msg) => {
