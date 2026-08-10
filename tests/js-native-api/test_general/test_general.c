@@ -145,6 +145,17 @@ static napi_value wrap(napi_env env, napi_callback_info info) {
   return wrap_first_arg(env, info, deref_item, &deref_item_called);
 }
 
+static napi_value unwrap(napi_env env, napi_callback_info info) {
+  size_t argc = 1;
+  napi_value wrapped;
+  void* data;
+
+  NODE_API_CALL(env, napi_get_cb_info(env, info, &argc, &wrapped, NULL, NULL));
+  NODE_API_CALL(env, napi_unwrap(env, wrapped, &data));
+
+  return NULL;
+}
+
 static napi_value remove_wrap(napi_env env, napi_callback_info info) {
   size_t argc = 1;
   napi_value wrapped;
@@ -212,6 +223,7 @@ napi_value Init(napi_env env, napi_value exports) {
       DECLARE_NODE_API_PROPERTY("testNapiErrorCleanup", testNapiErrorCleanup),
       DECLARE_NODE_API_PROPERTY("testNapiTypeof", testNapiTypeof),
       DECLARE_NODE_API_PROPERTY("wrap", wrap),
+      DECLARE_NODE_API_PROPERTY("unwrap", unwrap),
       DECLARE_NODE_API_PROPERTY("removeWrap", remove_wrap),
       DECLARE_NODE_API_PROPERTY("testFinalizeWrap", test_finalize_wrap),
       DECLARE_NODE_API_PROPERTY("finalizeWasCalled", finalize_was_called),
