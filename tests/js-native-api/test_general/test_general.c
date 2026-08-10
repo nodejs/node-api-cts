@@ -35,6 +35,20 @@ static napi_value testGetVersion(napi_env env, napi_callback_info info) {
   return result;
 }
 
+static napi_value doInstanceOf(napi_env env, napi_callback_info info) {
+  size_t argc = 2;
+  napi_value args[2];
+  NODE_API_CALL(env, napi_get_cb_info(env, info, &argc, args, NULL, NULL));
+
+  bool is_instance;
+  NODE_API_CALL(env, napi_instanceof(env, args[0], args[1], &is_instance));
+
+  napi_value result;
+  NODE_API_CALL(env, napi_get_boolean(env, is_instance, &result));
+
+  return result;
+}
+
 static napi_value getNull(napi_env env, napi_callback_info info) {
   napi_value result;
   NODE_API_CALL(env, napi_get_null(env, &result));
@@ -206,6 +220,7 @@ napi_value Init(napi_env env, napi_value exports) {
       DECLARE_NODE_API_PROPERTY("testGetPrototype", testGetPrototype),
       DECLARE_NODE_API_PROPERTY("testGetVersion", testGetVersion),
       DECLARE_NODE_API_PROPERTY("testNapiRun", testNapiRun),
+      DECLARE_NODE_API_PROPERTY("doInstanceOf", doInstanceOf),
       DECLARE_NODE_API_PROPERTY("getUndefined", getUndefined),
       DECLARE_NODE_API_PROPERTY("getNull", getNull),
       DECLARE_NODE_API_PROPERTY("createNapiError", createNapiError),
