@@ -10,7 +10,11 @@ globalThis.experimentalFeatures = {
   // added in Node.js v24.9.0. Earlier versions do not export these symbols,
   // causing addons that reference them to fail at dlopen time.
   sharedArrayBuffer: major >= 25 || (major === 24 && minor >= 9),
-  createObjectWithProperties: true,
+  // node_api_create_object_with_properties was added in Node.js v25.2.0 and
+  // v24.12.0, and not backported to v20.x or v22.x. Earlier versions do not
+  // export the symbol, so an addon referencing it fails at dlopen time.
+  createObjectWithProperties:
+    major > 25 || (major === 25 && minor >= 2) || (major === 24 && minor >= 12),
   setPrototype: true,
   postFinalizer: true,
 };
