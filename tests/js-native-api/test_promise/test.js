@@ -1,4 +1,3 @@
-'use strict';
 const test_promise = loadAddon('test_promise');
 
 // A resolution

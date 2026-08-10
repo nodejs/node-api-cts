@@ -1,5 +1,3 @@
-'use strict';
-
 // napi_create_dataview accepts a SharedArrayBuffer-backed buffer only on newer
 // Node.js releases (see implementors/node/features.js).
 if (!runtimeFeatures.dataviewSharedArrayBuffer) {

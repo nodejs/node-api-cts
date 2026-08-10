@@ -1,5 +1,3 @@
-'use strict';
-
 // Test passing NULL to object-related Node-APIs.
 const { testNull } = loadAddon('test_string');
 

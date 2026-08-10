@@ -1,4 +1,3 @@
-'use strict';
 // Flags: --expose-gc
 
 // Testing api calls for function

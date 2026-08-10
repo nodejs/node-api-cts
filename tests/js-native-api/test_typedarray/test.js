@@ -1,5 +1,3 @@
-'use strict';
-
 // Testing api calls for arrays
 const test_typedarray = loadAddon('test_typedarray');
 

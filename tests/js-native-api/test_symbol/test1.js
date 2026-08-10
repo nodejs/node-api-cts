@@ -1,4 +1,3 @@
-'use strict';
 const test_symbol = loadAddon('test_symbol');
 
 const sym = test_symbol.New('test');

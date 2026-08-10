@@ -1,5 +1,3 @@
-'use strict';
-
 // SharedArrayBuffer support is an experimental feature.
 if (!experimentalFeatures.sharedArrayBuffer) {
   skipTest();
