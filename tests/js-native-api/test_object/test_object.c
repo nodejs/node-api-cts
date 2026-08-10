@@ -2,6 +2,7 @@
 #include <string.h>
 #include "../common.h"
 #include "../entry_point.h"
+#include "test_null.h"
 
 static int test_value = 3;
 
@@ -652,6 +653,8 @@ napi_value Init(napi_env env, napi_value exports) {
       DECLARE_NODE_API_PROPERTY("TestFreeze", TestFreeze),
       DECLARE_NODE_API_PROPERTY("TestSeal", TestSeal),
   };
+
+  init_test_null(env, exports);
 
   NODE_API_CALL(env,
                 napi_define_properties(env,
