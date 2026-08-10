@@ -1,3 +1,10 @@
+// A runtime whose object APIs don't surface a throwing proxy handler as a
+// pending exception leaves the throw to escape the addon entirely, so there is
+// nothing meaningful to assert there.
+if (!runtimeFeatures.proxyHandlerExceptions) {
+  skipTest();
+}
+
 const { testExceptions } = loadAddon('test_exceptions');
 
 function throws() {
