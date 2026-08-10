@@ -58,12 +58,12 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `test_exception`             | Ported ✅  | Medium     |
 | `test_finalizer`             | Ported ✅  | Medium     |
 | `test_function`              | Ported ✅  | Medium     |
-| `test_general`               | Not ported | Hard       |
+| `test_general`               | Ported ✅  | Hard       |
 | `test_handle_scope`          | Ported ✅  | Easy       |
 | `test_instance_data`         | Not ported | Medium     |
 | `test_new_target`            | Ported ✅  | Easy       |
 | `test_number`                | Ported ✅  | Easy       |
-| `test_object`                | Not ported | Hard       |
+| `test_object`                | Ported ✅  | Hard       |
 | `test_promise`               | Ported ✅  | Easy       |
 | `test_properties`            | Ported ✅  | Easy       |
 | `test_reference`             | Ported ✅  | Medium     |
@@ -122,8 +122,9 @@ runtime uses it to decide whether to enable experimental behavior for that addon
 | `NODE_API_EXPERIMENTAL_HAS_SET_PROTOTYPE`                 | `node_api_set_prototype`                                             | `test_general`                                    |
 | `NODE_API_EXPERIMENTAL_HAS_POST_FINALIZER`                | `node_api_post_finalizer`                                            | `test_general`, `test_finalizer`, `6_object_wrap` |
 
-Tests that depend on these APIs are currently ported without the experimental test cases (marked
-as "Partial" in the status column) or not ported at all.
+Tests that depend on these APIs either split the experimental cases into a separate addon (see
+"Stable core plus experimental annex" below), are ported without those cases (marked as "Partial"
+in the status column), or are not ported at all.
 
 ### Infrastructure for experimental features
 
@@ -156,22 +157,30 @@ The CTS provides the following infrastructure (see [#26](https://github.com/node
 
 ## Special Considerations
 
-### `node_api_post_finalizer` (`6_object_wrap`, `test_finalizer`)
+### `node_api_post_finalizer` (`6_object_wrap`)
 
-Both tests call `node_api_post_finalizer` to defer JS-touching work out of the GC finalizer and
+The test calls `node_api_post_finalizer` to defer JS-touching work out of the GC finalizer and
 onto the main thread. The function is declared in `js_native_api.h` but is gated behind
 `NAPI_EXPERIMENTAL`, so not all runtimes may implement it yet. The CTS harness will need a
 platform-agnostic post-finalizer primitive that implementors can map to their own
 deferred-callback mechanism, or the tests need to isolate the post-finalizer cases behind a
 runtime capability check.
 
-### `node_api_set_prototype` / `napi_get_prototype` (`test_general`, js-native-api)
+### Stable core plus experimental annex (`test_general`, `test_object`)
 
-The general test suite mixes `js_native_api.h` assertions with calls to `node_api_set_prototype`
-(gated behind `NAPI_EXPERIMENTAL`) and `napi_get_prototype` (standard). The experimental function
-may not be implemented by all runtimes yet. The CTS port should split the affected test cases into
-a stable core and an experimental annex, or guard the `node_api_set_prototype` cases with a
-runtime capability check.
+Both upstream tests mix `js_native_api.h` assertions with calls to APIs gated behind
+`NAPI_EXPERIMENTAL`. Building one addon for the whole directory would make the entire test
+unloadable on a runtime missing any one experimental symbol, so the CTS splits each directory into
+a stable addon plus one small experimental addon per experimental API:
+
+| Directory      | Stable addon  | Experimental addon                       | Feature flag                 |
+| -------------- | ------------- | ---------------------------------------- | ---------------------------- |
+| `test_general` | `test_general` | `test_general_set_prototype`            | `setPrototype`               |
+| `test_general` | `test_general` | `test_general_finalizer`                | `postFinalizer`              |
+| `test_object`  | `test_object`  | `test_object_create_with_properties`    | `createObjectWithProperties` |
+
+The JS file for each annex gates on its `experimentalFeatures` flag and calls `skipTest()` when the
+runtime does not declare it, so the stable cases keep running everywhere.
 
 ### SharedArrayBuffer backing-store creation (`test_sharedarraybuffer`)
 
