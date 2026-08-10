@@ -98,6 +98,7 @@ export default defineConfig([
         assert: 'readonly',
         loadAddon: 'readonly',
         mustCall: 'readonly',
+        mustCallAtLeast: 'readonly',
         mustNotCall: 'readonly',
         gc: 'readonly',
         gcUntil: 'readonly',
