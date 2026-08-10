@@ -1,5 +1,6 @@
 #include <js_native_api.h>
 #include <stdint.h>
+#include <stdio.h>
 #include "../common.h"
 #include "../entry_point.h"
 
@@ -178,6 +179,33 @@ static napi_value finalize_was_called(napi_env env, napi_callback_info info) {
   return it_was_called;
 }
 
+// Indexed by the second argument to envCleanupWrap(); testEnvCleanup_child.mjs
+// keeps a matching reverse mapping.
+static const char* env_cleanup_finalizer_messages[] = {
+    "simple wrap", "wrap, removeWrap", "first wrap", "second wrap"};
+
+static void cleanup_env_finalizer(node_api_basic_env env,
+                                  void* data,
+                                  void* hint) {
+  (void)env;
+  (void)hint;
+
+  printf("finalize at env cleanup for %s\n",
+         env_cleanup_finalizer_messages[(uintptr_t)data]);
+}
+
+static napi_value env_cleanup_wrap(napi_env env, napi_callback_info info) {
+  size_t argc = 2;
+  napi_value argv[2];
+  uint32_t value;
+
+  NODE_API_CALL(env, napi_get_cb_info(env, info, &argc, argv, NULL, NULL));
+  NODE_API_CALL(env, napi_get_value_uint32(env, argv[1], &value));
+
+  return wrap_first_arg(
+      env, info, cleanup_env_finalizer, (void*)(uintptr_t)value);
+}
+
 static napi_value testAdjustExternalMemory(napi_env env,
                                            napi_callback_info info) {
   napi_value result;
@@ -213,6 +241,7 @@ napi_value Init(napi_env env, napi_value exports) {
       DECLARE_NODE_API_PROPERTY("testNapiTypeof", testNapiTypeof),
       DECLARE_NODE_API_PROPERTY("wrap", wrap),
       DECLARE_NODE_API_PROPERTY("removeWrap", remove_wrap),
+      DECLARE_NODE_API_PROPERTY("envCleanupWrap", env_cleanup_wrap),
       DECLARE_NODE_API_PROPERTY("testFinalizeWrap", test_finalize_wrap),
       DECLARE_NODE_API_PROPERTY("finalizeWasCalled", finalize_was_called),
       DECLARE_NODE_API_PROPERTY("derefItemWasCalled", deref_item_was_called),
