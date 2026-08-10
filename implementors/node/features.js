@@ -11,7 +11,15 @@ globalThis.experimentalFeatures = {
   // causing addons that reference them to fail at dlopen time.
   sharedArrayBuffer: major >= 25 || (major === 24 && minor >= 9),
   createObjectWithProperties: true,
-  setPrototype: true,
+  // node_api_set_prototype was added in Node.js v25.4.0 and v24.13.1, and not
+  // backported to v20.x or v22.x. Earlier versions do not export the symbol,
+  // so an addon referencing it fails at dlopen time.
+  setPrototype:
+    major > 25 ||
+    (major === 25 && minor >= 4) ||
+    (major === 24 && (minor > 13 || (minor === 13 && patch >= 1))),
+  // node_api_post_finalizer has been available since v20.10.0, which is at or
+  // below every Node.js version this harness supports.
   postFinalizer: true,
 };
 
