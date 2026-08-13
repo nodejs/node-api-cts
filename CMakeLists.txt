@@ -40,6 +40,14 @@ function(add_node_api_cts_addon ADDON_NAME)
   endif()
   target_include_directories(${ADDON_NAME} PRIVATE ${NODE_API_HEADERS_DIR})
   target_link_libraries(${ADDON_NAME} PRIVATE ${NODE_API_LIB})
+  if(MSVC)
+    # Delay-load the node.exe imports and resolve them against the host
+    # process at runtime, so the addons can be loaded by any Node-API host
+    # executable regardless of its file name (the node-gyp approach).
+    target_sources(${ADDON_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src/win_delay_load_hook.cc)
+    target_link_libraries(${ADDON_NAME} PRIVATE delayimp)
+    target_link_options(${ADDON_NAME} PRIVATE "/DELAYLOAD:NODE.EXE")
+  endif()
   target_compile_features(${ADDON_NAME} PRIVATE cxx_std_17)
   target_compile_definitions(${ADDON_NAME} PRIVATE ADDON_NAME=${ADDON_NAME})
 endfunction()
