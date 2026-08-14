@@ -1,8 +1,8 @@
 /*
  * When this file is linked to a DLL, it sets up a delay-load hook that
- * intervenes when the DLL is trying to load 'node.exe' dynamically. Instead
- * of trying to locate the .exe file it'll just return a handle to the
- * process image.
+ * intervenes when the DLL is trying to load 'node.exe' or 'libnode.dll'
+ * dynamically. Instead of trying to locate the file it'll just return a
+ * handle to the process image (or to libnode.dll if the host loaded one).
  *
  * This allows the test addons to load into any Node-API host executable,
  * regardless of its file name. Same approach as node-gyp's
@@ -25,7 +25,8 @@ static FARPROC WINAPI load_exe_hook(unsigned int event, DelayLoadInfo* info) {
   if (event != dliNotePreLoadLibrary)
     return NULL;
 
-  if (_stricmp(info->szDll, "node.exe") != 0)
+  if (_stricmp(info->szDll, "node.exe") != 0 &&
+      _stricmp(info->szDll, "libnode.dll") != 0)
     return NULL;
 
   // Prefer libnode.dll to support a Node.js built as a shared library.
