@@ -31,4 +31,10 @@ globalThis.runtimeFeatures = {
     major > 25 ||
     (major === 25 && minor >= 4) ||
     (major === 24 && (minor > 13 || (minor === 13 && patch >= 1))),
+
+  // Object APIs report a throwing proxy handler as napi_pending_exception only
+  // since Node.js v22.0.0 (nodejs/node@52fcf14258b). It was not backported to
+  // v20.x, where the exception is left pending but the call reports another
+  // status, so the throw escapes the addon instead.
+  proxyHandlerExceptions: major >= 22,
 };
