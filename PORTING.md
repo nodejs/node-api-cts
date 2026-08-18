@@ -63,7 +63,7 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `test_instance_data`         | Not ported | Medium     |
 | `test_new_target`            | Ported ✅  | Easy       |
 | `test_number`                | Ported ✅  | Easy       |
-| `test_object`                | Not ported | Hard       |
+| `test_object`                | Partial    | Hard       |
 | `test_promise`               | Ported ✅  | Easy       |
 | `test_properties`            | Ported ✅  | Easy       |
 | `test_reference`             | Ported ✅  | Medium     |
