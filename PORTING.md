@@ -44,7 +44,7 @@ Tests covering the engine-specific part of Node-API, defined in `js_native_api.h
 | `3_callbacks`                | Ported ✅  | Easy       |
 | `4_object_factory`           | Ported ✅  | Easy       |
 | `5_function_factory`         | Ported ✅  | Easy       |
-| `6_object_wrap`              | Not ported | Medium     |
+| `6_object_wrap`              | Ported ✅  | Medium     |
 | `7_factory_wrap`             | Ported ✅  | Easy       |
 | `8_passing_wrapped`          | Ported ✅  | Easy       |
 | `test_array`                 | Ported ✅  | Easy       |

@@ -1,0 +1,6 @@
+add_node_api_cts_addon(myobject myobject.cc)
+
+add_node_api_cts_experimental_addon(myobject_basic_finalizer SOURCES myobject.cc)
+
+add_node_api_cts_addon(nested_wrap nested_wrap.cc)
+target_compile_definitions(nested_wrap PRIVATE NAPI_VERSION=10)
