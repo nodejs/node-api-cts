@@ -31,4 +31,13 @@ globalThis.runtimeFeatures = {
     major > 25 ||
     (major === 25 && minor >= 4) ||
     (major === 24 && (minor > 13 || (minor === 13 && patch >= 1))),
+
+  // napi_create_typedarray accepts a SharedArrayBuffer-backed buffer only
+  // since Node.js v26.2.0 and v24.18.0 (nodejs/node#62710). The v25.x line
+  // saw no release after that landed, and it was not backported to v20.x or
+  // v22.x, where such calls fail with "invalid argument".
+  typedarraySharedArrayBuffer:
+    major > 26 ||
+    (major === 26 && minor >= 2) ||
+    (major === 24 && minor >= 18),
 };
