@@ -17,6 +17,7 @@ jobs:
           - 22.x
           - 24.x
           - 25.x
+          - 26.x
     runs-on: ${{ matrix.runner }}
     steps:
     - name: Harden Runner

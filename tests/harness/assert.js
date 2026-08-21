@@ -105,3 +105,49 @@ if (!threw) throw new Error('assert.match must throw when input is not a string'
 threw = false;
 try { assert.match('hello', 'hello'); } catch { threw = true; }
 if (!threw) throw new Error('assert.match must throw when pattern is not a RegExp');
+
+// The message is optional on every method. A failure without one must still
+// report the comparison, and a failure with one must report that message.
+function failureOf(label, fn) {
+  try {
+    fn();
+  } catch (error) {
+    return error;
+  }
+  throw new Error(`${label} was expected to throw`);
+}
+
+const optionalMessage = [
+  ['assert', () => assert(false), (m) => assert(false, m)],
+  ['assert.ok', () => assert.ok(false), (m) => assert.ok(false, m)],
+  ['assert.strictEqual', () => assert.strictEqual(1, 2), (m) => assert.strictEqual(1, 2, m)],
+  ['assert.notStrictEqual', () => assert.notStrictEqual(1, 1), (m) => assert.notStrictEqual(1, 1, m)],
+  [
+    'assert.deepStrictEqual',
+    () => assert.deepStrictEqual({ a: 1 }, { a: 2 }),
+    (m) => assert.deepStrictEqual({ a: 1 }, { a: 2 }, m),
+  ],
+  ['assert.match', () => assert.match('hello', /world/), (m) => assert.match('hello', /world/, m)],
+  ['assert.throws', () => assert.throws(() => {}, /oops/), (m) => assert.throws(() => {}, /oops/, m)],
+];
+
+const customMessage = 'a message the caller chose';
+
+for (const [label, withoutMessage, withMessage] of optionalMessage) {
+  // Only a substring check: the strict assert methods append their own value
+  // comparison to a caller supplied message.
+  const described = failureOf(label, () => withMessage(customMessage));
+  if (!described.message.includes(customMessage)) {
+    throw new Error(
+      `${label} must fail with the message it was given but failed with "${described.message}"`,
+    );
+  }
+
+  const bare = failureOf(label, withoutMessage);
+  if (bare.name !== described.name) {
+    throw new Error(
+      `${label} must fail the same way with and without a message, but without one it failed ` +
+      `with "${bare.name}: ${bare.message}" instead of ${described.name}`,
+    );
+  }
+}
