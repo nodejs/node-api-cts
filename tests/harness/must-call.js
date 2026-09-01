@@ -26,6 +26,35 @@ if (typeof mustCall !== 'function') {
   assert.strictEqual(result, undefined);
 }
 
+// mustCallAtLeast is a function
+if (typeof mustCallAtLeast !== 'function') {
+  throw new Error('Expected a global mustCallAtLeast function');
+}
+
+// mustCallAtLeast forwards arguments and return value, and tolerates more
+// calls than the minimum
+{
+  const wrapper = mustCallAtLeast((a, b) => a + b, 2);
+  assert.strictEqual(wrapper(2, 3), 5);
+  assert.strictEqual(wrapper(4, 5), 9);
+  assert.strictEqual(wrapper(6, 7), 13);
+}
+
+// mustCallAtLeast defaults its minimum to one call
+{
+  const wrapper = mustCallAtLeast();
+  const result = wrapper('ignored');
+  assert.strictEqual(result, undefined);
+}
+
+// Falling short of the minimum fails. The count is only checked at process
+// exit, so observing the failure needs a child process.
+if (runtimeFeatures.spawn) {
+  const result = await spawnTest('must-call-at-least-child.mjs');
+  assert.notStrictEqual(result.status, 0, 'an under-called mustCallAtLeast should fail the child');
+  assert.match(result.stderr, /underCalled.*at least 2 call\(s\) but got 1/);
+}
+
 // mustNotCall is a function
 if (typeof mustNotCall !== 'function') {
   throw new Error('Expected a global mustNotCall function');

@@ -1,5 +1,7 @@
 # node-api-cts
 
+AI use must follow the [Node.js AI Use Policy and Guidelines](https://github.com/nodejs/node/blob/main/doc/contributing/ai-guidelines.md) and [Code of Conduct](https://github.com/nodejs/node/blob/main/CODE_OF_CONDUCT.md).
+
 ## Project Overview
 
 Node-API Conformance Test Suite: A pure ECMAScript test suite for Node-API implementors across different JS engines and runtimes (Node.js, Deno, Bun, React Native, WebAssembly, etc.).
